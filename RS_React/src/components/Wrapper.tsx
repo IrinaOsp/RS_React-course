@@ -1,9 +1,9 @@
 import { Component, ReactNode } from 'react';
-import SearchForm from './SearchForm';
+import { SearchForm, TypeSearchResponse } from './SearchForm';
 import SearchResults from './SearchResults';
 
 interface IWrapperState {
-  searchData: unknown;
+  searchData: TypeSearchResponse | null;
 }
 export default class Wrapper extends Component<object, IWrapperState> {
   constructor(props: object) {
@@ -12,7 +12,7 @@ export default class Wrapper extends Component<object, IWrapperState> {
       searchData: null,
     };
   }
-  updateSearchData = (data: unknown) => {
+  updateSearchData = (data: TypeSearchResponse) => {
     this.setState({ searchData: data });
   };
   render(): ReactNode {
