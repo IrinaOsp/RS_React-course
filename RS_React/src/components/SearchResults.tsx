@@ -1,5 +1,6 @@
 import { Component, ReactNode } from 'react';
 import { ISearchResponseItem, TypeSearchResponse } from './SearchForm';
+import './styles/SearchResults.css';
 
 interface ISearchResultsProps {
   data: TypeSearchResponse;
@@ -58,7 +59,7 @@ export default class SearchResults extends Component<ISearchResultsProps, ISearc
           data &&
           renderData &&
           renderData.map((item) => (
-            <div key={item.name}>
+            <div key={item.name} className="search-item">
               <span>Name: {item.name}</span>
               <span>ID: {item.id}</span>
               <span>Height: {item.height}</span>
