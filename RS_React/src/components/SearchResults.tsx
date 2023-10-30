@@ -18,14 +18,11 @@ export default class SearchResults extends Component<ISearchResultsProps, ISearc
     };
   }
   componentDidUpdate(prevProps: Readonly<ISearchResultsProps>): void {
-    console.log('update');
     if (prevProps.data !== this.props.data) {
       this.loadData();
     }
   }
   async loadData() {
-    console.log('load');
-
     const { data } = this.props;
     this.setState({ isLoading: true });
     if (data && 'results' in data) {
@@ -41,7 +38,6 @@ export default class SearchResults extends Component<ISearchResultsProps, ISearc
         })
       );
       this.setState({ renderData, isLoading: false });
-      console.log(renderData);
     }
     if (data && 'id' in data) {
       this.setState({ renderData: [data], isLoading: false });
@@ -51,7 +47,6 @@ export default class SearchResults extends Component<ISearchResultsProps, ISearc
   render(): ReactNode {
     const { data } = this.props;
     const { renderData, isLoading } = this.state;
-    console.log(data, renderData, isLoading);
     return (
       <div className="search-results">
         {isLoading && <p>Loading...</p>}

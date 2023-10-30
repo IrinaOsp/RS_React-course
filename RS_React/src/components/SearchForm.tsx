@@ -49,7 +49,6 @@ export class SearchForm extends Component<ISearchFormProps, ISearchFormState> {
         return res.json();
       })
       .then((data: TypeSearchResponse) => {
-        console.log(data);
         this.props.updateSearchData(data);
       })
       .catch((error) => {
