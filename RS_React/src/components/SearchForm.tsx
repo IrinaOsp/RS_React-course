@@ -1,4 +1,5 @@
 import { ChangeEvent, Component } from 'react';
+import ThrowErrorButton from './ThrowErrorButton';
 
 interface ISearchFormProps {
   updateSearchData: (data: TypeSearchResponse) => void;
@@ -40,7 +41,7 @@ export class SearchForm extends Component<ISearchFormProps, ISearchFormState> {
   handleInputChange = (e: ChangeEvent<HTMLInputElement>): void => {
     this.setState({ search: e.target.value });
   };
-  handleSearch = () => {
+  handleSearch = (): void => {
     localStorage.setItem('search', this.state.search);
     fetch(`https://pokeapi.co/api/v2/pokemon/${this.state.search}`)
       .then((res) => {
@@ -62,6 +63,7 @@ export class SearchForm extends Component<ISearchFormProps, ISearchFormState> {
       this.handleSearch();
     }
   };
+
   render() {
     return (
       <form>
@@ -77,6 +79,7 @@ export class SearchForm extends Component<ISearchFormProps, ISearchFormState> {
         <button type="button" onClick={this.handleSearch}>
           Search
         </button>
+        <ThrowErrorButton />
       </form>
     );
   }
