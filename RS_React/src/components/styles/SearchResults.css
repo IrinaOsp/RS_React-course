@@ -1,4 +1,5 @@
 .search-results {
+  margin-top: 20px;
   display: flex;
   gap: 40px;
   justify-content: space-around;

@@ -17,7 +17,7 @@ export default class Wrapper extends Component<object, IWrapperState> {
   };
   render(): ReactNode {
     return (
-      <div>
+      <div className="wrapper">
         <SearchForm updateSearchData={this.updateSearchData} />
         <SearchResults data={this.state.searchData} />
       </div>

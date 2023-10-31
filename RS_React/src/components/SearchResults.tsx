@@ -42,6 +42,7 @@ export default class SearchResults extends Component<ISearchResultsProps, ISearc
     if (data && 'id' in data) {
       this.setState({ renderData: [data], isLoading: false });
     }
+    if (data === null) this.setState({ isLoading: false });
   }
 
   render(): ReactNode {
