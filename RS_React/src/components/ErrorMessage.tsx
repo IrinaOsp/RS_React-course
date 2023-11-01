@@ -4,6 +4,7 @@ export default class ErrorMessage extends Component {
   handleClick = () => {
     window.location.reload();
   };
+
   render(): ReactNode {
     return (
       <>

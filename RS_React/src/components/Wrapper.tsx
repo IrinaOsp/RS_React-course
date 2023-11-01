@@ -5,6 +5,7 @@ import SearchResults from './SearchResults';
 interface IWrapperState {
   searchData: TypeSearchResponse | null;
 }
+
 export default class Wrapper extends Component<object, IWrapperState> {
   constructor(props: object) {
     super(props);
@@ -12,9 +13,11 @@ export default class Wrapper extends Component<object, IWrapperState> {
       searchData: null,
     };
   }
+
   updateSearchData = (data: TypeSearchResponse) => {
     this.setState({ searchData: data });
   };
+
   render(): ReactNode {
     return (
       <div className="wrapper">

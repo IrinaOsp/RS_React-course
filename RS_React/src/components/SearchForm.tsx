@@ -11,6 +11,7 @@ interface ISearchFormState {
 }
 
 export type TypeSearchResponse = ISearchResponseItem | ISearchResponseArray | null;
+
 export interface ISearchResponseItem {
   height: number;
   id: number;
@@ -18,10 +19,13 @@ export interface ISearchResponseItem {
   sprites: { front_default: string };
   weight: number;
 }
+
 interface ISearchResponseArray {
   results: TypeSearchResponseArray;
 }
+
 export type TypeSearchResponseArray = ISearchArrayItem[];
+
 interface ISearchArrayItem {
   name: string;
   url: string;
@@ -31,21 +35,26 @@ export class SearchForm extends Component<ISearchFormProps, ISearchFormState> {
   constructor(props: ISearchFormProps) {
     super(props);
   }
+
   state = {
     search: localStorage.getItem('search') || '',
   };
+
   componentDidMount(): void {
     this.setState({
       search: localStorage.getItem('search') || '',
     });
     this.handleSearch();
   }
+
   handleInputChange = (e: ChangeEvent<HTMLInputElement>): void => {
     this.setState({ search: e.target.value });
   };
+
   handleSearch = (): void => {
     if (localStorage.getItem('search') !== this.state.search)
       localStorage.setItem('search', this.state.search);
+
     fetch(`https://pokeapi.co/api/v2/pokemon/${this.state.search}`)
       .then((res) => {
         if (!res.ok) throw new Error(`fetch error with status ${res.status}`);
@@ -59,6 +68,7 @@ export class SearchForm extends Component<ISearchFormProps, ISearchFormState> {
         this.props.updateSearchData(null);
       });
   };
+
   handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter') {
       e.preventDefault();

@@ -5,10 +5,12 @@ import './styles/SearchResults.css';
 interface ISearchResultsProps {
   data: TypeSearchResponse;
 }
+
 interface ISearchResultsState {
   renderData: ISearchResponseItem[] | null;
   isLoading: boolean;
 }
+
 export default class SearchResults extends Component<ISearchResultsProps, ISearchResultsState> {
   constructor(props: ISearchResultsProps) {
     super(props);
@@ -17,14 +19,17 @@ export default class SearchResults extends Component<ISearchResultsProps, ISearc
       isLoading: false,
     };
   }
+
   componentDidUpdate(prevProps: Readonly<ISearchResultsProps>): void {
     if (prevProps.data !== this.props.data) {
       this.loadData();
     }
   }
+
   async loadData() {
     const { data } = this.props;
     this.setState({ isLoading: true });
+
     if (data && 'results' in data) {
       const renderData: ISearchResponseItem[] = await Promise.all(
         data.results.map(async (item) => {
@@ -39,18 +44,22 @@ export default class SearchResults extends Component<ISearchResultsProps, ISearc
       );
       this.setState({ renderData, isLoading: false });
     }
+
     if (data && 'id' in data) {
       this.setState({ renderData: [data], isLoading: false });
     }
+
     if (data === null) this.setState({ isLoading: false });
   }
 
   render(): ReactNode {
     const { data } = this.props;
     const { renderData, isLoading } = this.state;
+
     return (
       <div className="search-results">
         {isLoading && <p>Loading...</p>}
+
         {!isLoading &&
           data &&
           renderData &&
@@ -65,6 +74,7 @@ export default class SearchResults extends Component<ISearchResultsProps, ISearc
               </div>
             </div>
           ))}
+
         {!isLoading && !data && <p>No search results</p>}
       </div>
     );
