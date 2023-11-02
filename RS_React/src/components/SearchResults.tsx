@@ -1,4 +1,4 @@
-import { Component, ReactNode } from 'react';
+import { useState } from 'react';
 import { ISearchResponseItem, TypeSearchResponse } from './SearchForm';
 import './styles/SearchResults.css';
 
@@ -6,29 +6,12 @@ interface ISearchResultsProps {
   data: TypeSearchResponse;
 }
 
-interface ISearchResultsState {
-  renderData: ISearchResponseItem[] | null;
-  isLoading: boolean;
-}
+export default function SearchResults(props: ISearchResultsProps) {
+  const [renderData, setRenderData] = useState<ISearchResponseItem[] | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
 
-export default class SearchResults extends Component<ISearchResultsProps, ISearchResultsState> {
-  constructor(props: ISearchResultsProps) {
-    super(props);
-    this.state = {
-      renderData: null,
-      isLoading: false,
-    };
-  }
-
-  componentDidUpdate(prevProps: Readonly<ISearchResultsProps>): void {
-    if (prevProps.data !== this.props.data) {
-      this.loadData();
-    }
-  }
-
-  async loadData() {
-    const { data } = this.props;
-    this.setState({ isLoading: true });
+  const loadData = async (data: TypeSearchResponse) => {
+    setIsLoading(true);
 
     if (data && 'results' in data) {
       const renderData: ISearchResponseItem[] = await Promise.all(
@@ -42,41 +25,40 @@ export default class SearchResults extends Component<ISearchResultsProps, ISearc
           }
         })
       );
-      this.setState({ renderData, isLoading: false });
+      setRenderData(renderData);
+      setIsLoading(false);
     }
 
     if (data && 'id' in data) {
-      this.setState({ renderData: [data], isLoading: false });
+      setRenderData([data]);
+      setIsLoading(false);
     }
 
-    if (data === null) this.setState({ isLoading: false });
-  }
+    if (data === null) setIsLoading(false);
+  };
 
-  render(): ReactNode {
-    const { data } = this.props;
-    const { renderData, isLoading } = this.state;
+  if (props.data) loadData(props.data);
 
-    return (
-      <div className="search-results">
-        {isLoading && <p>Loading...</p>}
+  return (
+    <div className="search-results">
+      {isLoading && <p>Loading...</p>}
 
-        {!isLoading &&
-          data &&
-          renderData &&
-          renderData.map((item) => (
-            <div key={item.name} className="search-item">
-              <span>Name: {item.name}</span>
-              <span>ID: {item.id}</span>
-              <span>Height: {item.height}</span>
-              <span>Weight: {item.weight}</span>
-              <div>
-                <img src={item.sprites.front_default} alt="img" />
-              </div>
+      {!isLoading &&
+        props.data &&
+        renderData &&
+        renderData.map((item) => (
+          <div key={item.name} className="search-item">
+            <span>Name: {item.name}</span>
+            <span>ID: {item.id}</span>
+            <span>Height: {item.height}</span>
+            <span>Weight: {item.weight}</span>
+            <div>
+              <img src={item.sprites.front_default} alt="img" />
             </div>
-          ))}
+          </div>
+        ))}
 
-        {!isLoading && !data && <p>No search results</p>}
-      </div>
-    );
-  }
+      {!isLoading && !props.data && <p>No search results</p>}
+    </div>
+  );
 }
