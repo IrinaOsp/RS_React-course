@@ -1,13 +1,9 @@
-import { ChangeEvent, Component } from 'react';
+import { ChangeEvent, useState } from 'react';
 import ThrowErrorButton from './ThrowErrorButton';
 import './styles/SearchForm.css';
 
 interface ISearchFormProps {
   updateSearchData: (data: TypeSearchResponse) => void;
-}
-
-interface ISearchFormState {
-  search: string;
 }
 
 export type TypeSearchResponse = ISearchResponseItem | ISearchResponseArray | null;
@@ -31,68 +27,52 @@ interface ISearchArrayItem {
   url: string;
 }
 
-export class SearchForm extends Component<ISearchFormProps, ISearchFormState> {
-  constructor(props: ISearchFormProps) {
-    super(props);
-  }
+export function SearchForm(props: ISearchFormProps) {
+  const [search, setSearch] = useState<string>(localStorage.getItem('search') || '');
 
-  state = {
-    search: localStorage.getItem('search') || '',
+  const handleInputChange = (e: ChangeEvent<HTMLInputElement>): void => {
+    setSearch(e.target.value);
   };
 
-  componentDidMount(): void {
-    this.setState({
-      search: localStorage.getItem('search') || '',
-    });
-    this.handleSearch();
-  }
+  const handleSearch = (): void => {
+    if (localStorage.getItem('search') !== search) localStorage.setItem('search', search);
 
-  handleInputChange = (e: ChangeEvent<HTMLInputElement>): void => {
-    this.setState({ search: e.target.value });
-  };
-
-  handleSearch = (): void => {
-    if (localStorage.getItem('search') !== this.state.search)
-      localStorage.setItem('search', this.state.search);
-
-    fetch(`https://pokeapi.co/api/v2/pokemon/${this.state.search}`)
+    fetch(`https://pokeapi.co/api/v2/pokemon/${search}`)
       .then((res) => {
         if (!res.ok) throw new Error(`fetch error with status ${res.status}`);
         return res.json();
       })
       .then((data: TypeSearchResponse) => {
-        this.props.updateSearchData(data);
+        props.updateSearchData(data);
       })
       .catch((error) => {
         console.error('Error ', error);
-        this.props.updateSearchData(null);
+        props.updateSearchData(null);
       });
   };
 
-  handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter') {
       e.preventDefault();
-      this.handleSearch();
+      handleSearch();
     }
   };
 
-  render() {
-    return (
-      <form className="search-form">
-        <input
-          type="text"
-          name="search"
-          id="search"
-          placeholder="Enter text"
-          value={this.state.search}
-          onChange={this.handleInputChange}
-          onKeyDown={this.handleKeyDown}
-        />
-        <button type="button" onClick={this.handleSearch}>
-          Search
-        </button>
-        <ThrowErrorButton />
-      </form>
-    );
-  }
+  return (
+    <form className="search-form">
+      <input
+        type="text"
+        name="search"
+        id="search"
+        placeholder="Enter text"
+        value={search}
+        onChange={handleInputChange}
+        onKeyDown={handleKeyDown}
+      />
+      <button type="button" onClick={handleSearch}>
+        Search
+      </button>
+      <ThrowErrorButton />
+    </form>
+  );
 }
