@@ -1,29 +1,18 @@
-import { Component, ReactNode } from 'react';
+import { ReactNode, useState } from 'react';
 import { SearchForm, TypeSearchResponse } from './SearchForm';
 import SearchResults from './SearchResults';
 
-interface IWrapperState {
-  searchData: TypeSearchResponse | null;
-}
+export default function Wrapper(): ReactNode {
+  const [searchData, setSearchData] = useState<TypeSearchResponse | null>(null);
 
-export default class Wrapper extends Component<object, IWrapperState> {
-  constructor(props: object) {
-    super(props);
-    this.state = {
-      searchData: null,
-    };
-  }
-
-  updateSearchData = (data: TypeSearchResponse) => {
-    this.setState({ searchData: data });
+  const updateSearchData = (data: TypeSearchResponse | null) => {
+    setSearchData(data);
   };
 
-  render(): ReactNode {
-    return (
-      <div className="wrapper">
-        <SearchForm updateSearchData={this.updateSearchData} />
-        <SearchResults data={this.state.searchData} />
-      </div>
-    );
-  }
+  return (
+    <div className="wrapper">
+      <SearchForm updateSearchData={updateSearchData} />
+      <SearchResults data={searchData} />
+    </div>
+  );
 }
