@@ -1,23 +1,17 @@
-import { Component } from 'react';
+import { useState } from 'react';
 
-export default class ThrowErrorButton extends Component {
-  state = {
-    throwError: false,
+export default function ThrowErrorButton() {
+  const [throwError, setThrowError] = useState(false);
+
+  const handleError = (): void => {
+    setThrowError(true);
   };
 
-  handleError = (): void => {
-    this.setState({
-      throwError: true,
-    });
-  };
+  if (throwError) throw Error('ErrorBoundary should catch this error');
 
-  render() {
-    const { throwError } = this.state;
-    if (throwError) throw Error('ErrorBoundary should catch this error');
-    return (
-      <button type="button" onClick={this.handleError}>
-        Throw Error
-      </button>
-    );
-  }
+  return (
+    <button type="button" onClick={handleError}>
+      Throw Error
+    </button>
+  );
 }
