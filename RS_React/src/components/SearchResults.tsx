@@ -1,20 +1,23 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { ISearchResponseItem, TypeSearchResponse } from './SearchForm';
 import './styles/SearchResults.css';
+import { Outlet } from 'react-router-dom';
+import Card from './Card';
 
 interface ISearchResultsProps {
   data: TypeSearchResponse;
 }
 
 export default function SearchResults(props: ISearchResultsProps) {
+  const { data } = props;
   const [renderData, setRenderData] = useState<ISearchResponseItem[] | null>(null);
   const [isLoading, setIsLoading] = useState(false);
-
-  const loadData = async (data: TypeSearchResponse) => {
+  useEffect(() => {
+    // const loadData = async (data: TypeSearchResponse) => {
     setIsLoading(true);
 
     if (data && 'results' in data) {
-      const renderData: ISearchResponseItem[] = await Promise.all(
+      const renderData: Promise<ISearchResponseItem[]> = Promise.all(
         data.results.map(async (item) => {
           try {
             const response = await fetch(item.url);
@@ -25,7 +28,7 @@ export default function SearchResults(props: ISearchResultsProps) {
           }
         })
       );
-      setRenderData(renderData);
+      renderData.then((res) => setRenderData(res));
       setIsLoading(false);
     }
 
@@ -35,30 +38,23 @@ export default function SearchResults(props: ISearchResultsProps) {
     }
 
     if (data === null) setIsLoading(false);
-  };
-
-  if (props.data) loadData(props.data);
+    // };
+  }, [data]);
 
   return (
-    <div className="search-results">
-      {isLoading && <p>Loading...</p>}
+    <div className="main-section">
+      <div className="search-results">
+        {isLoading && <p>Loading...</p>}
 
-      {!isLoading &&
-        props.data &&
-        renderData &&
-        renderData.map((item) => (
-          <div key={item.name} className="search-item">
-            <span>Name: {item.name}</span>
-            <span>ID: {item.id}</span>
-            <span>Height: {item.height}</span>
-            <span>Weight: {item.weight}</span>
-            <div>
-              <img src={item.sprites.front_default} alt="img" />
-            </div>
-          </div>
-        ))}
+        {!isLoading &&
+          props.data &&
+          renderData &&
+          renderData.map((item) => <Card {...item} key={item.name} />)}
 
-      {!isLoading && !props.data && <p>No search results</p>}
+        {!isLoading && !props.data && <p>No search results</p>}
+      </div>
+
+      <Outlet />
     </div>
   );
 }
