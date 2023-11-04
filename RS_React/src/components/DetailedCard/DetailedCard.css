@@ -1,0 +1,36 @@
+.detailed-card {
+  position: relative;
+  min-width: 30vw;
+  max-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 5px;
+  border: 1px gray solid;
+  border-radius: 10px;
+  box-shadow: 10px 5px 5px gray;
+}
+
+.detailed-img {
+  width: 100%;
+}
+
+.detailed-img img {
+  width: 50%;
+  height: auto;
+}
+
+.detailed-card-close {
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  padding: 5px;
+  background-color: #fff;
+  top: -11px;
+  right: -9px;
+  border: 1px solid gray;
+  border-radius: 50%;
+  line-height: 20px;
+  cursor: pointer;
+}

@@ -1,6 +1,7 @@
-import { ChangeEvent, useState } from 'react';
+import { ChangeEvent, useEffect, useState } from 'react';
 import ThrowErrorButton from './ThrowErrorButton';
 import './styles/SearchForm.css';
+import baseURL from '../data/data';
 
 interface ISearchFormProps {
   updateSearchData: (data: TypeSearchResponse) => void;
@@ -37,7 +38,7 @@ export function SearchForm(props: ISearchFormProps) {
   const handleSearch = (): void => {
     if (localStorage.getItem('search') !== search) localStorage.setItem('search', search);
 
-    fetch(`https://pokeapi.co/api/v2/pokemon/${search}`)
+    fetch(`${baseURL}${search}`)
       .then((res) => {
         if (!res.ok) throw new Error(`fetch error with status ${res.status}`);
         return res.json();
@@ -50,6 +51,10 @@ export function SearchForm(props: ISearchFormProps) {
         props.updateSearchData(null);
       });
   };
+
+  useEffect(() => {
+    handleSearch();
+  }, []);
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter') {

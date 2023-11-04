@@ -1,10 +1,16 @@
+import { useNavigate } from 'react-router-dom';
 import { ISearchResponseItem } from './SearchForm';
 
 export default function Card(data: ISearchResponseItem) {
   const { name, id, height, weight, sprites } = data;
+  const navigate = useNavigate();
+
+  const handleClick = () => {
+    navigate(`${id}`);
+  };
 
   return (
-    <div className="search-item">
+    <div className="search-item" onClick={handleClick}>
       <span>Name: {name}</span>
       <span>ID: {id}</span>
       <span>Height: {height}</span>
