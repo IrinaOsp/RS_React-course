@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 
 import { ISearchResponseItem } from '../SearchForm';
-import baseURL from '../../data/data';
+import { baseURL } from '../../data/data';
 
 import './DetailedCard.css';
 
@@ -37,6 +37,7 @@ export default function DetailedCard() {
       <span className="detailed-card-close" onClick={handleClose}>
         X
       </span>
+      <div className="close-background" onClick={handleClose} />
     </div>
   );
 }

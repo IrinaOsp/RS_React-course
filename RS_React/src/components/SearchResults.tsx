@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { ISearchResponseItem, TypeSearchResponse } from './SearchForm';
 import './styles/SearchResults.css';
-import { Outlet } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import Card from './Card';
 
 interface ISearchResultsProps {
@@ -12,8 +12,11 @@ export default function SearchResults(props: ISearchResultsProps) {
   const { data } = props;
   const [renderData, setRenderData] = useState<ISearchResponseItem[] | null>(null);
   const [isLoading, setIsLoading] = useState(false);
+
+  const { id } = useParams();
+  console.log(id);
+
   useEffect(() => {
-    // const loadData = async (data: TypeSearchResponse) => {
     setIsLoading(true);
 
     if (data && 'results' in data) {
@@ -38,7 +41,6 @@ export default function SearchResults(props: ISearchResultsProps) {
     }
 
     if (data === null) setIsLoading(false);
-    // };
   }, [data]);
 
   return (
@@ -53,8 +55,6 @@ export default function SearchResults(props: ISearchResultsProps) {
 
         {!isLoading && !props.data && <p>No search results</p>}
       </div>
-
-      <Outlet />
     </div>
   );
 }

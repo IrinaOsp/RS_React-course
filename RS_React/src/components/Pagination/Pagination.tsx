@@ -1,9 +1,10 @@
 import { useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
+import { defaultItemsPerPage } from '../../data/data';
 import './Pagination.css';
 
 export default function Pagination() {
-  const [itemsPerPage, setItemsPerPage] = useState('10');
+  const [itemsPerPage, setItemsPerPage] = useState(defaultItemsPerPage);
   const [currentPage, setCurrentPage] = useState('1');
   const [searchParams, setSearchParams] = useSearchParams({
     page: currentPage,
@@ -18,7 +19,8 @@ export default function Pagination() {
     e: React.MouseEvent<HTMLButtonElement, MouseEvent> | React.KeyboardEvent<HTMLInputElement>
   ) => {
     e.preventDefault();
-    setSearchParams({ page: currentPage, page_size: itemsPerPage });
+    setCurrentPage('1');
+    setSearchParams({ page: '1', page_size: itemsPerPage });
   };
 
   const handleEnter = (e: React.KeyboardEvent<HTMLInputElement>) => {

@@ -1,7 +1,7 @@
 import { ChangeEvent, useEffect, useState } from 'react';
 import ThrowErrorButton from './ThrowErrorButton';
 import './styles/SearchForm.css';
-import baseURL from '../data/data';
+import { baseURL, defaultItemsPerPage } from '../data/data';
 import { useSearchParams } from 'react-router-dom';
 
 interface ISearchFormProps {
@@ -41,8 +41,9 @@ export function SearchForm(props: ISearchFormProps) {
     if (localStorage.getItem('search') !== search) localStorage.setItem('search', search);
     const limit = searchParams.get('page_size');
     const page = searchParams.get('page');
-    const offset = page && limit ? +page * +limit : 0;
-    fetch(`${baseURL}${search}?limit=${limit}&offset=${offset}`)
+    const offset = page && limit ? (+page - 1) * +limit : 0;
+    console.log(limit, offset);
+    fetch(`${baseURL}${search}?limit=${limit || defaultItemsPerPage}&offset=${offset}`)
       .then((res) => {
         if (!res.ok) throw new Error(`fetch error with status ${res.status}`);
         return res.json();
