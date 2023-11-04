@@ -2,12 +2,13 @@ import { ChangeEvent, useEffect, useState } from 'react';
 import ThrowErrorButton from './ThrowErrorButton';
 import './styles/SearchForm.css';
 import baseURL from '../data/data';
+import { useSearchParams } from 'react-router-dom';
 
 interface ISearchFormProps {
   updateSearchData: (data: TypeSearchResponse) => void;
 }
 
-export type TypeSearchResponse = ISearchResponseItem | ISearchResponseArray | null;
+export type TypeSearchResponse = ISearchResponseItem | ISearchResponseArray | null | '';
 
 export interface ISearchResponseItem {
   height: number;
@@ -30,6 +31,7 @@ interface ISearchArrayItem {
 
 export function SearchForm(props: ISearchFormProps) {
   const [search, setSearch] = useState<string>(localStorage.getItem('search') || '');
+  const [searchParams] = useSearchParams();
 
   const handleInputChange = (e: ChangeEvent<HTMLInputElement>): void => {
     setSearch(e.target.value);
@@ -37,8 +39,10 @@ export function SearchForm(props: ISearchFormProps) {
 
   const handleSearch = (): void => {
     if (localStorage.getItem('search') !== search) localStorage.setItem('search', search);
-
-    fetch(`${baseURL}${search}`)
+    const limit = searchParams.get('page_size');
+    const page = searchParams.get('page');
+    const offset = page && limit ? +page * +limit : 0;
+    fetch(`${baseURL}${search}?limit=${limit}&offset=${offset}`)
       .then((res) => {
         if (!res.ok) throw new Error(`fetch error with status ${res.status}`);
         return res.json();
@@ -48,13 +52,13 @@ export function SearchForm(props: ISearchFormProps) {
       })
       .catch((error) => {
         console.error('Error ', error);
-        props.updateSearchData(null);
+        props.updateSearchData('');
       });
   };
 
   useEffect(() => {
     handleSearch();
-  }, []);
+  }, [searchParams]);
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter') {
