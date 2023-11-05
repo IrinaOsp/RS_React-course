@@ -4,6 +4,7 @@ import './App.css';
 import Main from './components/Main/Main';
 import DetailedCard from './components/DetailedCard/DetailedCard';
 import ErrorMessage from './components/ErrorMessage';
+import Page404 from './components/Page404';
 
 const router = createBrowserRouter([
   {
@@ -14,14 +15,12 @@ const router = createBrowserRouter([
       {
         path: ':id',
         element: <DetailedCard />,
-        // children: [
-        //   {
-        //     path: '*',
-        //     action:
-        //   }
-        // ]
       },
     ],
+  },
+  {
+    path: '*',
+    element: <Page404 />,
   },
 ]);
 
