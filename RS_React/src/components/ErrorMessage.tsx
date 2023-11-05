@@ -1,8 +1,10 @@
 import { ReactNode } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 export default function ErrorMessage(): ReactNode {
+  const navigate = useNavigate();
   const handleClick = () => {
-    window.location.reload();
+    navigate('/');
   };
 
   return (
