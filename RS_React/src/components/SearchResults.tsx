@@ -3,6 +3,7 @@ import { ISearchResponseItem, TypeSearchResponse } from './SearchForm';
 import './styles/SearchResults.css';
 import { useParams } from 'react-router-dom';
 import Card from './Card';
+import LoadingSpinner from './LoadingSpinner/LoadingSpinner';
 
 interface ISearchResultsProps {
   data: TypeSearchResponse;
@@ -20,7 +21,7 @@ export default function SearchResults(props: ISearchResultsProps) {
     setIsLoading(true);
 
     if (data && 'results' in data) {
-      const renderData: Promise<ISearchResponseItem[]> = Promise.all(
+      Promise.all(
         data.results.map(async (item) => {
           try {
             const response = await fetch(item.url);
@@ -30,9 +31,9 @@ export default function SearchResults(props: ISearchResultsProps) {
             return null;
           }
         })
-      );
-      renderData.then((res) => setRenderData(res));
-      setIsLoading(false);
+      )
+        .then((res) => setRenderData(res))
+        .then(() => setIsLoading(false));
     }
 
     if (data && 'id' in data) {
@@ -46,7 +47,7 @@ export default function SearchResults(props: ISearchResultsProps) {
   return (
     <div className="main-section">
       <div className="search-results">
-        {isLoading && <p>Loading...</p>}
+        {isLoading && <LoadingSpinner />}
 
         {!isLoading &&
           props.data &&

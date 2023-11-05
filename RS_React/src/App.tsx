@@ -2,13 +2,13 @@ import { ReactNode } from 'react';
 import { RouterProvider, createBrowserRouter } from 'react-router-dom';
 import './App.css';
 import Main from './components/Main/Main';
-import ErrorBoundary from './components/ErrorBoundary';
 import DetailedCard from './components/DetailedCard/DetailedCard';
+import ErrorMessage from './components/ErrorMessage';
 
 const router = createBrowserRouter([
   {
     path: '/',
-    errorElement: <ErrorBoundary />,
+    errorElement: <ErrorMessage />,
     element: <Main />,
     children: [
       {

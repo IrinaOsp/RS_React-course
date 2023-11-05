@@ -3,26 +3,31 @@ import { useNavigate, useParams } from 'react-router-dom';
 
 import { ISearchResponseItem } from '../SearchForm';
 import { baseURL } from '../../data/data';
+import LoadingSpinner from '../LoadingSpinner/LoadingSpinner';
 
 import './DetailedCard.css';
 
 export default function DetailedCard() {
   const { id } = useParams();
   const navigate = useNavigate();
+  const [isLoading, setIsLoading] = useState(false);
   const [data, setData] = useState<ISearchResponseItem | null>(null);
 
   useEffect(() => {
+    setIsLoading(true);
     fetch(`${baseURL}${id}`)
       .then((res) => res.json())
-      .then((itemData) => setData(itemData));
+      .then((itemData) => setData(itemData))
+      .then(() => setIsLoading(false));
   }, [id]);
 
   const handleClose = () => {
-    navigate('/');
+    navigate(-1);
   };
 
   return (
     <div className="detailed-card">
+      {isLoading && <LoadingSpinner />}
       {data && (
         <>
           <span>Name: {data.name}</span>
