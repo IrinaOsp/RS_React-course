@@ -1,5 +1,5 @@
 import { Link, useSearchParams } from 'react-router-dom';
-import { ISearchResponseItem } from './SearchForm/SearchForm';
+import { ISearchResponseItem } from '../types/types';
 
 export default function Card(data: ISearchResponseItem) {
   const { name, id, height, weight, sprites } = data;

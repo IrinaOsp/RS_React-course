@@ -1,11 +1,11 @@
 import { useEffect, useState } from 'react';
 import { ErrorResponse, useNavigate, useParams } from 'react-router-dom';
 
-import { ISearchResponseItem } from '../SearchForm/SearchForm';
 import { baseURL } from '../../data/data';
 import LoadingSpinner from '../LoadingSpinner/LoadingSpinner';
 
 import './DetailedCard.css';
+import { ISearchResponseItem } from '../../types/types';
 
 export default function DetailedCard() {
   const { id } = useParams();
