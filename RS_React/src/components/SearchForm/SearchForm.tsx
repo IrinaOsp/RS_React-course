@@ -1,11 +1,12 @@
-import { ChangeEvent, useEffect, useState } from 'react';
-import { useSearchParams } from 'react-router-dom';
+import { ChangeEvent, useState } from 'react';
+import { SetURLSearchParams } from 'react-router-dom';
 import ThrowErrorButton from '../ThrowErrorButton';
-import { baseURL, defaultItemsPerPage } from '../../data/data';
 import './SearchForm.css';
 
 interface ISearchFormProps {
   updateSearchData: (data: TypeSearchResponse) => void;
+  searchParams: URLSearchParams;
+  setSearchParams: SetURLSearchParams;
 }
 
 export type TypeSearchResponse = ISearchResponseItem | ISearchResponseArray | null | '';
@@ -31,40 +32,20 @@ interface ISearchArrayItem {
 
 export function SearchForm(props: ISearchFormProps) {
   const [search, setSearch] = useState<string>(localStorage.getItem('search') || '');
-  const [searchParams] = useSearchParams();
-
+  const searchParams = props.searchParams;
+  const setSearchParams = props.setSearchParams;
   const handleInputChange = (e: ChangeEvent<HTMLInputElement>): void => {
     setSearch(e.target.value);
   };
 
   const handleSearch = (): void => {
     if (localStorage.getItem('search') !== search) localStorage.setItem('search', search);
-    const limit = searchParams.get('page_size');
-    const page = searchParams.get('page');
-    const offset = page && limit ? (+page - 1) * +limit : 0;
-    console.log(limit, offset);
-    fetch(`${baseURL}${search}?limit=${limit || defaultItemsPerPage}&offset=${offset}`)
-      .then((res) => {
-        if (!res.ok) throw new Error(`fetch error with status ${res.status}`);
-        return res.json();
-      })
-      .then((data: TypeSearchResponse) => {
-        props.updateSearchData(data);
-      })
-      .catch((error) => {
-        console.error('Error ', error);
-        props.updateSearchData('');
-      });
+    setSearchParams({ ...searchParams, search: search || '' });
   };
-
-  useEffect(() => {
-    handleSearch();
-  }, [searchParams]);
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter') {
       e.preventDefault();
-      handleSearch();
     }
   };
 

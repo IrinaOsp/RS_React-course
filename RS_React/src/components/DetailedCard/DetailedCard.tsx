@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { ErrorResponse, useNavigate, useParams } from 'react-router-dom';
 
 import { ISearchResponseItem } from '../SearchForm/SearchForm';
 import { baseURL } from '../../data/data';
@@ -16,13 +16,16 @@ export default function DetailedCard() {
   useEffect(() => {
     setIsLoading(true);
     fetch(`${baseURL}${id}`)
-      .then((res) => res.json())
+      .then((res) => (res.ok ? res.json() : Error(`error in fetch, status ${res.status}`)))
       .then((itemData) => setData(itemData))
-      .then(() => setIsLoading(false));
+      .then(() => setIsLoading(false))
+      .catch((e: ErrorResponse) => {
+        throw Error(`error in fetch detailed card: ${e}`);
+      });
   }, [id]);
 
   const handleClose = () => {
-    navigate(-1);
+    navigate(-1 || '/');
   };
 
   return (

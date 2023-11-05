@@ -1,5 +1,4 @@
 import { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
 import { ISearchResponseItem, TypeSearchResponse } from '../SearchForm/SearchForm';
 import Card from '../Card';
 import LoadingSpinner from '../LoadingSpinner/LoadingSpinner';
@@ -13,9 +12,6 @@ export default function SearchResults(props: ISearchResultsProps) {
   const { data } = props;
   const [renderData, setRenderData] = useState<ISearchResponseItem[] | null>(null);
   const [isLoading, setIsLoading] = useState(false);
-
-  const { id } = useParams();
-  console.log(id);
 
   useEffect(() => {
     setIsLoading(true);

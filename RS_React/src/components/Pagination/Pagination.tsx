@@ -1,15 +1,20 @@
 import { useState } from 'react';
-import { useSearchParams } from 'react-router-dom';
+import { SetURLSearchParams } from 'react-router-dom';
 import { defaultItemsPerPage } from '../../data/data';
 import './Pagination.css';
 
-export default function Pagination() {
-  const [itemsPerPage, setItemsPerPage] = useState(defaultItemsPerPage);
+interface IPaginationProps {
+  searchParams: URLSearchParams;
+  setSearchParams: SetURLSearchParams;
+}
+
+export default function Pagination(props: IPaginationProps) {
   const [currentPage, setCurrentPage] = useState('1');
-  const [searchParams, setSearchParams] = useSearchParams({
-    page: currentPage,
-    page_size: itemsPerPage,
-  });
+  const searchParams = props.searchParams;
+  const setSearchParams = props.setSearchParams;
+  const [itemsPerPage, setItemsPerPage] = useState(
+    searchParams.get('page_size') || defaultItemsPerPage
+  );
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setItemsPerPage(e.target.value);
@@ -49,7 +54,7 @@ export default function Pagination() {
       <button onClick={handlePrevClick} disabled={+currentPage === 1}>
         prev
       </button>
-      <span>{searchParams.get('page')}</span>
+      <span>{searchParams.get('page') || 1}</span>
       <button onClick={handleNextClick}>next</button>
       Items per page
       <form>
