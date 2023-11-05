@@ -1,8 +1,8 @@
 import { ChangeEvent, useEffect, useState } from 'react';
-import ThrowErrorButton from './ThrowErrorButton';
-import './styles/SearchForm.css';
-import { baseURL, defaultItemsPerPage } from '../data/data';
 import { useSearchParams } from 'react-router-dom';
+import ThrowErrorButton from '../ThrowErrorButton';
+import { baseURL, defaultItemsPerPage } from '../../data/data';
+import './SearchForm.css';
 
 interface ISearchFormProps {
   updateSearchData: (data: TypeSearchResponse) => void;

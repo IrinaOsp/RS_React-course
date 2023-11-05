@@ -1,6 +1,6 @@
 import { ReactNode, useState } from 'react';
-import { SearchForm, TypeSearchResponse } from '../SearchForm';
-import SearchResults from '../SearchResults';
+import { SearchForm, TypeSearchResponse } from '../SearchForm/SearchForm';
+import SearchResults from '../SearchResults/SearchResults';
 import Pagination from '../Pagination/Pagination';
 
 export default function Wrapper(): ReactNode {

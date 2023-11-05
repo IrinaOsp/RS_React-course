@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 
-import { ISearchResponseItem } from '../SearchForm';
+import { ISearchResponseItem } from '../SearchForm/SearchForm';
 import { baseURL } from '../../data/data';
 import LoadingSpinner from '../LoadingSpinner/LoadingSpinner';
 

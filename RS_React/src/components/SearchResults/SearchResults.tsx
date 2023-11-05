@@ -1,9 +1,9 @@
 import { useEffect, useState } from 'react';
-import { ISearchResponseItem, TypeSearchResponse } from './SearchForm';
-import './styles/SearchResults.css';
 import { useParams } from 'react-router-dom';
-import Card from './Card';
-import LoadingSpinner from './LoadingSpinner/LoadingSpinner';
+import { ISearchResponseItem, TypeSearchResponse } from '../SearchForm/SearchForm';
+import Card from '../Card';
+import LoadingSpinner from '../LoadingSpinner/LoadingSpinner';
+import './SearchResults.css';
 
 interface ISearchResultsProps {
   data: TypeSearchResponse;
