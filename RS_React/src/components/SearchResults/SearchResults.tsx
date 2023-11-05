@@ -1,12 +1,8 @@
 import { useEffect, useState } from 'react';
-import { ISearchResponseItem, TypeSearchResponse } from '../SearchForm/SearchForm';
 import Card from '../Card';
 import LoadingSpinner from '../LoadingSpinner/LoadingSpinner';
+import { ISearchResponseItem, ISearchResultsProps } from '../../types/types';
 import './SearchResults.css';
-
-interface ISearchResultsProps {
-  data: TypeSearchResponse;
-}
 
 export default function SearchResults(props: ISearchResultsProps) {
   const { data } = props;

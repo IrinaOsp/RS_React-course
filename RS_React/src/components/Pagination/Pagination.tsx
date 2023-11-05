@@ -1,17 +1,13 @@
 import { useState } from 'react';
-import { SetURLSearchParams } from 'react-router-dom';
 import { defaultItemsPerPage } from '../../data/data';
+import { IPaginationProps } from '../../types/types';
 import './Pagination.css';
-
-interface IPaginationProps {
-  searchParams: URLSearchParams;
-  setSearchParams: SetURLSearchParams;
-}
 
 export default function Pagination(props: IPaginationProps) {
   const [currentPage, setCurrentPage] = useState('1');
   const searchParams = props.searchParams;
   const setSearchParams = props.setSearchParams;
+  const totalPages = props.count;
   const [itemsPerPage, setItemsPerPage] = useState(
     searchParams.get('page_size') || defaultItemsPerPage
   );
@@ -42,11 +38,10 @@ export default function Pagination(props: IPaginationProps) {
   };
 
   const handleNextClick = () => {
-    // TODO: limit last page
-    // if (+currentPage > 1) {
-    setCurrentPage((prevPage) => (+prevPage + 1).toString());
-    setSearchParams({ page: (+currentPage + 1).toString(), page_size: itemsPerPage });
-    // }
+    if (+currentPage < totalPages) {
+      setCurrentPage((prevPage) => (+prevPage + 1).toString());
+      setSearchParams({ page: (+currentPage + 1).toString(), page_size: itemsPerPage });
+    }
   };
 
   return (
@@ -55,7 +50,9 @@ export default function Pagination(props: IPaginationProps) {
         prev
       </button>
       <span>{searchParams.get('page') || 1}</span>
-      <button onClick={handleNextClick}>next</button>
+      <button onClick={handleNextClick} disabled={+currentPage >= totalPages / +itemsPerPage}>
+        next
+      </button>
       Items per page
       <form>
         <input

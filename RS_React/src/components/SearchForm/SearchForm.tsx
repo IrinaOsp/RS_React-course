@@ -1,34 +1,7 @@
 import { ChangeEvent, useState } from 'react';
-import { SetURLSearchParams } from 'react-router-dom';
 import ThrowErrorButton from '../ThrowErrorButton';
+import { ISearchFormProps } from '../../types/types';
 import './SearchForm.css';
-
-interface ISearchFormProps {
-  updateSearchData: (data: TypeSearchResponse) => void;
-  searchParams: URLSearchParams;
-  setSearchParams: SetURLSearchParams;
-}
-
-export type TypeSearchResponse = ISearchResponseItem | ISearchResponseArray | null | '';
-
-export interface ISearchResponseItem {
-  height: number;
-  id: number;
-  name: string;
-  sprites: { front_default: string };
-  weight: number;
-}
-
-interface ISearchResponseArray {
-  results: TypeSearchResponseArray;
-}
-
-export type TypeSearchResponseArray = ISearchArrayItem[];
-
-interface ISearchArrayItem {
-  name: string;
-  url: string;
-}
 
 export function SearchForm(props: ISearchFormProps) {
   const [search, setSearch] = useState<string>(localStorage.getItem('search') || '');

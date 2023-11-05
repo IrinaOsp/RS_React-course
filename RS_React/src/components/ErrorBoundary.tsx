@@ -1,9 +1,6 @@
 import { Component, ErrorInfo, ReactNode } from 'react';
 import ErrorMessage from './ErrorMessage';
-
-interface ErrorBoundaryState {
-  hasError: boolean;
-}
+import { ErrorBoundaryState } from '../types/types';
 
 export default class ErrorBoundary extends Component {
   state: ErrorBoundaryState = { hasError: false };

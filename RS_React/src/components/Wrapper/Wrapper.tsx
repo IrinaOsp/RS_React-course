@@ -1,12 +1,14 @@
 import { ReactNode, useEffect, useState } from 'react';
-import { SearchForm, TypeSearchResponse } from '../SearchForm/SearchForm';
+import { SearchForm } from '../SearchForm/SearchForm';
 import SearchResults from '../SearchResults/SearchResults';
 import Pagination from '../Pagination/Pagination';
 import { useSearchParams } from 'react-router-dom';
 import { baseURL, defaultItemsPerPage } from '../../data/data';
+import { TypeSearchResponse } from '../../types/types';
 
 export default function Wrapper(): ReactNode {
   const [searchData, setSearchData] = useState<TypeSearchResponse | null>(null);
+  const [totalItems, setTotalItems] = useState<number>(0);
   const [searchParams, setSearchParams] = useSearchParams();
 
   const updateSearchData = (data: TypeSearchResponse | null) => {
@@ -24,6 +26,11 @@ export default function Wrapper(): ReactNode {
         return res.json();
       })
       .then((data: TypeSearchResponse) => {
+        if (data && 'count' in data) {
+          setTotalItems(data.count);
+        } else {
+          setTotalItems(1);
+        }
         updateSearchData(data);
       })
       .catch((error) => {
@@ -39,7 +46,11 @@ export default function Wrapper(): ReactNode {
         setSearchParams={setSearchParams}
         searchParams={searchParams}
       />
-      <Pagination setSearchParams={setSearchParams} searchParams={searchParams} />
+      <Pagination
+        setSearchParams={setSearchParams}
+        searchParams={searchParams}
+        count={totalItems}
+      />
       <SearchResults data={searchData} />
     </div>
   );
