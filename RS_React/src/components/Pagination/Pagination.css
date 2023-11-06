@@ -1,0 +1,14 @@
+.pagination {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  margin-top: 20px;
+}
+
+.pagination button[disabled] {
+  cursor: not-allowed;
+}
+
+#items-per-page {
+  margin-right: 20px;
+}
