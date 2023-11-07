@@ -5,13 +5,13 @@ import { baseURL } from '../../data/data';
 import LoadingSpinner from '../LoadingSpinner/LoadingSpinner';
 
 import './DetailedCard.css';
-import { ISearchResponseItem } from '../../types/types';
+import { ISearchResponseItemDetailed } from '../../types/types';
 
 export default function DetailedCard() {
   const { id } = useParams();
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
-  const [data, setData] = useState<ISearchResponseItem | null>(null);
+  const [data, setData] = useState<ISearchResponseItemDetailed | null>(null);
 
   useEffect(() => {
     setIsLoading(true);
@@ -37,8 +37,22 @@ export default function DetailedCard() {
           <span>ID: {data.id}</span>
           <span>Height: {data.height}</span>
           <span>Weight: {data.weight}</span>
+          <span>Base experience: {data.base_experience}</span>
+          <p>
+            Abilities:
+            {data.abilities.length
+              ? data.abilities.map((el) => <span key={el.ability.name}> {el.ability.name}; </span>)
+              : ' no'}
+          </p>
+          <p>
+            Held items:
+            {data['held_items'].length
+              ? data['held_items'].map((el) => <span key={el.item.name}> {el.item.name}; </span>)
+              : ' no'}
+          </p>
+
           <div className="detailed-img">
-            <img src={data.sprites.front_default} alt="img" />
+            <img src={data.sprites.other['official-artwork'].front_default} alt="img" />
           </div>
         </>
       )}
