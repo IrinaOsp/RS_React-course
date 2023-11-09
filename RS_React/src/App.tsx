@@ -5,6 +5,7 @@ import Main from './components/Main/Main';
 import DetailedCard from './components/DetailedCard/DetailedCard';
 import Page404 from './components/Page404';
 import ErrorBoundary from './components/ErrorBoundary';
+import { SearchState } from './context/Context';
 
 const router = createBrowserRouter([
   {
@@ -25,7 +26,11 @@ const router = createBrowserRouter([
 ]);
 
 function App(): ReactNode {
-  return <RouterProvider router={router} />;
+  return (
+    <SearchState>
+      <RouterProvider router={router} />
+    </SearchState>
+  );
 }
 
 export default App;

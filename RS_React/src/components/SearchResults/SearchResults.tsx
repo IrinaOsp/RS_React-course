@@ -1,20 +1,22 @@
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import Card from '../Card';
 import LoadingSpinner from '../LoadingSpinner/LoadingSpinner';
-import { ISearchResponseItem, ISearchResultsProps } from '../../types/types';
+import { ISearchResponseItem } from '../../types/types';
+import { SearchContext } from '../../context/Context';
 import './SearchResults.css';
 
-export default function SearchResults(props: ISearchResultsProps) {
-  const { data } = props;
+export default function SearchResults() {
+  // const { data } = props;
+  const { queryResponse } = useContext(SearchContext);
   const [renderData, setRenderData] = useState<ISearchResponseItem[] | null>(null);
   const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     setIsLoading(true);
 
-    if (data && 'results' in data) {
+    if (queryResponse && 'results' in queryResponse) {
       Promise.all(
-        data.results.map(async (item) => {
+        queryResponse.results.map(async (item) => {
           try {
             const response = await fetch(item.url);
             return response.ok ? response.json() : null;
@@ -27,14 +29,13 @@ export default function SearchResults(props: ISearchResultsProps) {
         .then((res) => setRenderData(res))
         .then(() => setIsLoading(false));
     }
-
-    if (data && 'id' in data) {
-      setRenderData([data]);
+    if (queryResponse && 'id' in queryResponse) {
+      setRenderData([queryResponse]);
       setIsLoading(false);
     }
 
-    if (data === null) setIsLoading(false);
-  }, [data]);
+    if (queryResponse === null) setIsLoading(false);
+  }, [queryResponse]);
 
   return (
     <div className="main-section">
@@ -42,11 +43,11 @@ export default function SearchResults(props: ISearchResultsProps) {
         {isLoading && <LoadingSpinner />}
 
         {!isLoading &&
-          props.data &&
+          queryResponse &&
           renderData &&
           renderData.map((item) => <Card {...item} key={item.name} />)}
 
-        {!isLoading && !props.data && <p>No search results</p>}
+        {!isLoading && !queryResponse && <p>No search results</p>}
       </div>
     </div>
   );
