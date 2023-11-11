@@ -1,14 +1,11 @@
 import { useContext, useEffect, useState } from 'react';
 import Card from '../Card';
 import LoadingSpinner from '../LoadingSpinner/LoadingSpinner';
-import { ISearchResponseItem } from '../../types/types';
 import { SearchContext } from '../../context/Context';
 import './SearchResults.css';
 
 export default function SearchResults() {
-  // const { data } = props;
-  const { queryResponse } = useContext(SearchContext);
-  const [renderData, setRenderData] = useState<ISearchResponseItem[] | null>(null);
+  const { queryResponse, dataToRenderCard, updateDataToRenderCard } = useContext(SearchContext);
   const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
@@ -26,11 +23,11 @@ export default function SearchResults() {
           }
         })
       )
-        .then((res) => setRenderData(res))
+        .then((res) => updateDataToRenderCard(res))
         .then(() => setIsLoading(false));
     }
     if (queryResponse && 'id' in queryResponse) {
-      setRenderData([queryResponse]);
+      updateDataToRenderCard([queryResponse]);
       setIsLoading(false);
     }
 
@@ -44,10 +41,13 @@ export default function SearchResults() {
 
         {!isLoading &&
           queryResponse &&
-          renderData &&
-          renderData.map((item) => <Card {...item} key={item.name} />)}
+          dataToRenderCard &&
+          dataToRenderCard.map((item) => <Card key={item.name} {...item} />)}
 
-        {!isLoading && !queryResponse && <p>No search results</p>}
+        {!isLoading &&
+          queryResponse &&
+          'results' in queryResponse &&
+          queryResponse.results.length === 0 && <p>No search results</p>}
       </div>
     </div>
   );

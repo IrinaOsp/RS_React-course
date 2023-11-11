@@ -2,7 +2,7 @@ import { createContext, useState } from 'react';
 import { defaultItemsPerPage } from '../data/data';
 import { ISearchResponseItem, TypeSearchResponse } from '../types/types';
 
-interface ISearchContext {
+export interface ISearchContext {
   searchText: string | null;
   updateSearchText: (searchText: string) => void;
   currentPageNumber: number;
@@ -11,6 +11,8 @@ interface ISearchContext {
   updateItemsPerPage: (itemsPerPage: number) => void;
   queryResponse: TypeSearchResponse | ISearchResponseItem | null;
   updateQueryResponse: (queryResponse: TypeSearchResponse) => void;
+  dataToRenderCard: ISearchResponseItem[];
+  updateDataToRenderCard: (dataToRenderCard: ISearchResponseItem[]) => void;
 }
 
 export const SearchContext = createContext<ISearchContext>({
@@ -22,6 +24,8 @@ export const SearchContext = createContext<ISearchContext>({
   updateItemsPerPage: () => {},
   queryResponse: null,
   updateQueryResponse: () => {},
+  dataToRenderCard: [],
+  updateDataToRenderCard: () => {},
 });
 
 export const SearchState = ({ children }: { children: React.ReactNode }) => {
@@ -29,6 +33,7 @@ export const SearchState = ({ children }: { children: React.ReactNode }) => {
   const [currentPageNumber, setCurrentPageNumber] = useState(1);
   const [itemsPerPage, setItemsPerPage] = useState(defaultItemsPerPage);
   const [queryResponse, setQueryResponse] = useState<TypeSearchResponse | null>(null);
+  const [dataToRenderCard, setDataToRenderCard] = useState<ISearchResponseItem[]>([]);
 
   const updateSearchText = (searchText: string) => setSearchText(searchText);
   const updateCurrentPageNumber = (currentPageNumber: number) =>
@@ -36,6 +41,8 @@ export const SearchState = ({ children }: { children: React.ReactNode }) => {
   const updateItemsPerPage = (itemsPerPage: number) => setItemsPerPage(itemsPerPage);
   const updateQueryResponse = (queryResponse: TypeSearchResponse) =>
     setQueryResponse(queryResponse);
+  const updateDataToRenderCard = (dataToRenderCard: ISearchResponseItem[]) =>
+    setDataToRenderCard(dataToRenderCard);
 
   return (
     <SearchContext.Provider
@@ -48,6 +55,8 @@ export const SearchState = ({ children }: { children: React.ReactNode }) => {
         updateItemsPerPage,
         queryResponse,
         updateQueryResponse,
+        dataToRenderCard,
+        updateDataToRenderCard,
       }}
     >
       {children}
