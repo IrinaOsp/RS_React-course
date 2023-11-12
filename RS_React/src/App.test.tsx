@@ -16,7 +16,7 @@ describe('App', () => {
 
   it('renders the Page404 component for unknown routes', async () => {
     act(() => {
-      window.history.pushState({}, 'Test Page', '/unknown');
+      window.history.pushState({}, 'Test Page', './unknown/unknown');
       window.dispatchEvent(new Event('popstate'));
       render(<App />);
     });

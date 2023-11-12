@@ -6,8 +6,18 @@ const items = [
     height: 7,
     id: 9,
     name: 'bulbasaurTest',
-    sprites: { front_default: 'img' },
     weight: 69,
+    base_experience: 64,
+    abilities: [{ ability: { name: 'overgrow' } }],
+    held_items: [],
+    sprites: {
+      front_default: 'img',
+      other: {
+        'official-artwork': {
+          front_default: 'img',
+        },
+      },
+    },
   },
   {
     height: 10,
