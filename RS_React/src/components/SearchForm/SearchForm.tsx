@@ -13,10 +13,10 @@ export function SearchForm() {
     updateSearchText(e.target.value);
   };
 
-  const handleSearch = (e: React.KeyboardEvent<HTMLFormElement>): void => {
+  const handleSearch = (e: React.FormEvent<HTMLFormElement>): void => {
     e.preventDefault();
-    const form = e.target as HTMLFormElement;
-    const value = form.search.value;
+    const inputElement = (e.target as HTMLFormElement).elements.namedItem('search');
+    const value = inputElement instanceof HTMLInputElement ? inputElement.value : '';
 
     if (localStorage.getItem('search') !== value) localStorage.setItem('search', value || '');
     updateSearchText(value);
@@ -24,13 +24,13 @@ export function SearchForm() {
   };
 
   return (
-    <form className="search-form" onSubmit={handleSearch}>
+    <form className="search-form" title="search-form" onSubmit={handleSearch}>
       <input
         type="text"
         name="search"
         id="search"
         placeholder="Enter text"
-        value={searchText || ''}
+        value={searchText}
         onChange={handleInputChange}
       />
       <button type="submit">Search</button>

@@ -24,7 +24,7 @@ export default function Wrapper(): ReactNode {
     const page = searchParams.get('page') || 1;
     updateCurrentPageNumber(+page);
     const searchQuery = searchParams.get('search') || '';
-    updateSearchText(searchQuery);
+    updateSearchText(searchQuery || localStorage.getItem('search') || '');
     const offset = page && limit ? (+page - 1) * +limit : 0;
 
     fetch(`${baseURL}${searchQuery}?limit=${limit}&offset=${offset}`)
