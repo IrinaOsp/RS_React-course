@@ -12,7 +12,7 @@
     "prepare": "cd .. && husky install RS_React/.husky",
     "test": "vitest",
     "coverage": "vitest run --coverage",
-    "husky-test": "vitest run"
+    "husky-test": "vitest"
   },
   "dependencies": {
     "localforage": "^1.10.0",
