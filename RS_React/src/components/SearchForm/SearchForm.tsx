@@ -1,41 +1,39 @@
-import { ChangeEvent, useState } from 'react';
+import { ChangeEvent, useContext } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import ThrowErrorButton from '../ThrowErrorButton';
-import { ISearchFormProps } from '../../types/types';
 import './SearchForm.css';
+import { SearchContext } from '../../context/Context';
 
-export function SearchForm(props: ISearchFormProps) {
-  const [search, setSearch] = useState<string>(localStorage.getItem('search') || '');
-  const searchParams = props.searchParams;
-  const setSearchParams = props.setSearchParams;
+export function SearchForm() {
+  // const [inputValue, setInputValue] = useState(localStorage.getItem('myValue') || '');
+  const { searchText, updateSearchText } = useContext(SearchContext);
+  const [, setSearchParams] = useSearchParams();
+
   const handleInputChange = (e: ChangeEvent<HTMLInputElement>): void => {
-    setSearch(e.target.value);
+    updateSearchText(e.target.value);
   };
 
-  const handleSearch = (): void => {
-    if (localStorage.getItem('search') !== search) localStorage.setItem('search', search);
-    setSearchParams({ ...searchParams, search: search || '' });
-  };
+  const handleSearch = (e: React.FormEvent<HTMLFormElement>): void => {
+    e.preventDefault();
+    const inputElement = (e.target as HTMLFormElement).elements.namedItem('search');
+    const value = inputElement instanceof HTMLInputElement ? inputElement.value : '';
 
-  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === 'Enter') {
-      e.preventDefault();
-    }
+    if (localStorage.getItem('search') !== value) localStorage.setItem('search', value || '');
+    updateSearchText(value);
+    setSearchParams({ search: value });
   };
 
   return (
-    <form className="search-form">
+    <form className="search-form" title="search-form" onSubmit={handleSearch}>
       <input
         type="text"
         name="search"
         id="search"
         placeholder="Enter text"
-        value={search}
+        value={searchText}
         onChange={handleInputChange}
-        onKeyDown={handleKeyDown}
       />
-      <button type="button" onClick={handleSearch}>
-        Search
-      </button>
+      <button type="submit">Search</button>
       <ThrowErrorButton />
     </form>
   );

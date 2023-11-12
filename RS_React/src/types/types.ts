@@ -9,6 +9,19 @@ export interface ISearchResponseItem {
   sprites: { front_default: string };
   weight: number;
 }
+export interface ISearchResponseItemDetailed extends ISearchResponseItem {
+  abilities: [{ ability: { name: string } }];
+  base_experience: number;
+  held_items: [{ item: { name: string } }];
+  sprites: {
+    front_default: string;
+    other: {
+      'official-artwork': {
+        front_default: string;
+      };
+    };
+  };
+}
 
 export interface ISearchResponseArray {
   count: number;

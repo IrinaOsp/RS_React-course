@@ -1,60 +1,60 @@
-import { useState } from 'react';
-import { defaultItemsPerPage } from '../../data/data';
-import { IPaginationProps } from '../../types/types';
+import { useContext } from 'react';
+import { useSearchParams } from 'react-router-dom';
+import { SearchContext } from '../../context/Context';
 import './Pagination.css';
 
-export default function Pagination(props: IPaginationProps) {
-  const [currentPage, setCurrentPage] = useState('1');
-  const searchParams = props.searchParams;
-  const setSearchParams = props.setSearchParams;
-  const totalPages = props.count;
-  const [itemsPerPage, setItemsPerPage] = useState(
-    searchParams.get('page_size') || defaultItemsPerPage
-  );
-
+export default function Pagination() {
+  const {
+    currentPageNumber,
+    updateCurrentPageNumber,
+    itemsPerPage,
+    updateItemsPerPage,
+    queryResponse,
+  } = useContext(SearchContext);
+  const [searchParams, setSearchParams] = useSearchParams();
+  const totalPages = queryResponse && 'count' in queryResponse ? queryResponse.count : 1;
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setItemsPerPage(e.target.value);
+    updateItemsPerPage(+e.target.value);
   };
 
-  const handleClick = (
-    e: React.MouseEvent<HTMLButtonElement, MouseEvent> | React.KeyboardEvent<HTMLInputElement>
-  ) => {
+  const handleSubmit = (e: React.KeyboardEvent<HTMLFormElement>): void => {
     e.preventDefault();
-    setCurrentPage('1');
-    setSearchParams({ page: '1', page_size: itemsPerPage });
-  };
-
-  const handleEnter = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === 'Enter') {
-      handleClick(e);
-    }
+    updateCurrentPageNumber(1);
+    setSearchParams({ page: currentPageNumber.toString(), page_size: itemsPerPage.toString() });
   };
 
   const handlePrevClick = () => {
-    if (+currentPage > 1) {
-      setCurrentPage((prevPage) => (+prevPage - 1).toString());
-      setSearchParams({ page: (+currentPage - 1).toString(), page_size: itemsPerPage });
+    if (currentPageNumber > 1) {
+      updateCurrentPageNumber(currentPageNumber - 1);
+      setSearchParams({
+        page: (currentPageNumber - 1).toString(),
+        page_size: itemsPerPage.toString(),
+      });
     }
   };
 
   const handleNextClick = () => {
-    if (+currentPage < totalPages) {
-      setCurrentPage((prevPage) => (+prevPage + 1).toString());
-      setSearchParams({ page: (+currentPage + 1).toString(), page_size: itemsPerPage });
+    console.log('next');
+    if (currentPageNumber < totalPages) {
+      updateCurrentPageNumber(currentPageNumber + 1);
+      setSearchParams({
+        page: (currentPageNumber + 1).toString(),
+        page_size: itemsPerPage.toString(),
+      });
     }
   };
 
   return (
     <div className="pagination">
-      <button onClick={handlePrevClick} disabled={+currentPage === 1}>
+      <button onClick={handlePrevClick} disabled={currentPageNumber === 1}>
         prev
       </button>
       <span>{searchParams.get('page') || 1}</span>
-      <button onClick={handleNextClick} disabled={+currentPage >= totalPages / +itemsPerPage}>
+      <button onClick={handleNextClick} disabled={currentPageNumber >= totalPages / +itemsPerPage}>
         next
       </button>
       Items per page
-      <form>
+      <form onSubmit={handleSubmit}>
         <input
           type="number"
           name="items"
@@ -63,11 +63,8 @@ export default function Pagination(props: IPaginationProps) {
           max={100}
           value={itemsPerPage}
           onChange={handleChange}
-          onKeyDown={handleEnter}
         />
-        <button type="submit" onClick={handleClick}>
-          Change items number
-        </button>
+        <button type="submit">Change items number</button>
       </form>
     </div>
   );
