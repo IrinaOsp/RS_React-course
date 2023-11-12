@@ -12,15 +12,14 @@ export default function DetailedCard() {
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
   const [data, setData] = useState<ISearchResponseItemDetailed | null>(null);
-
   useEffect(() => {
     setIsLoading(true);
     fetch(`${baseURL}${id}`)
-      .then((res) => (res.ok ? res.json() : Error(`error in fetch, status ${res.status}`)))
+      .then((res) => (res.ok ? res.json() : console.warn(res.status)))
       .then((itemData) => setData(itemData))
       .then(() => setIsLoading(false))
       .catch((e: ErrorResponse) => {
-        throw Error(`error in fetch detailed card: ${e}`);
+        console.warn(`error in fetch detailed card: ${e}`);
       });
   }, [id]);
 
@@ -29,7 +28,7 @@ export default function DetailedCard() {
   };
 
   return (
-    <div className="detailed-card">
+    <div className="detailed-card" data-testid="detailed-card">
       {isLoading && <LoadingSpinner />}
       {data && (
         <>
