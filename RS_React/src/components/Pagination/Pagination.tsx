@@ -11,13 +11,8 @@ export default function Pagination() {
     updateItemsPerPage,
     queryResponse,
   } = useContext(SearchContext);
-  // const [currentPage, setCurrentPage] = useState('1');
   const [searchParams, setSearchParams] = useSearchParams();
   const totalPages = queryResponse && 'count' in queryResponse ? queryResponse.count : 1;
-  // const [itemsPerPage, setItemsPerPage] = useState(
-  //   searchParams.get('page_size') || defaultItemsPerPage
-  // );
-
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     updateItemsPerPage(+e.target.value);
   };
@@ -39,6 +34,7 @@ export default function Pagination() {
   };
 
   const handleNextClick = () => {
+    console.log('next');
     if (currentPageNumber < totalPages) {
       updateCurrentPageNumber(currentPageNumber + 1);
       setSearchParams({
