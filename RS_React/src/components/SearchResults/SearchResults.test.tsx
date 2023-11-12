@@ -40,25 +40,9 @@ describe('SearchResults', async () => {
         `${baseURL}?limit=${context.itemsPerPage}&offset=${offset}`
       ).then((res) => res.json() as Promise<TypeSearchResponse>);
       context.updateQueryResponse(response);
-
-      // const fetchItem = async (id: string) => {
-      //   return await fetch(`${baseURL}${id}`).then(
-      //     (res) => res.json() as Promise<ISearchResponseItem>
-      //   );
-      // };
-      // const resDataToRenderItem1 = await fetchItem('1');
-      // const resDataToRenderItem2 = await fetchItem('2');
-      // const resDataToRenderItem3 = await fetchItem('3');
-      // const resDataToRenderItem4 = await fetchItem('4');
-      // context.updateDataToRenderCard([
-      //   resDataToRenderItem1,
-      //   resDataToRenderItem2,
-      //   resDataToRenderItem3,
-      //   resDataToRenderItem4,
-      // ]);
     };
 
-    await waitFor(fetchData, { timeout: 7000 }).then(() => {});
+    await waitFor(fetchData, { timeout: 7000 });
     render(
       <SearchContext.Provider value={context}>
         <MockSearchResults />

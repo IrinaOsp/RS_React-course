@@ -34,7 +34,7 @@ export const SearchState = ({ children }: { children: React.ReactNode }) => {
   const [itemsPerPage, setItemsPerPage] = useState(defaultItemsPerPage);
   const [queryResponse, setQueryResponse] = useState<TypeSearchResponse | null>(null);
   const [dataToRenderCard, setDataToRenderCard] = useState<ISearchResponseItem[]>([]);
-  console.log(searchText);
+
   const updateSearchText = (searchText: string) => setSearchText(searchText);
   const updateCurrentPageNumber = (currentPageNumber: number) =>
     setCurrentPageNumber(currentPageNumber);
