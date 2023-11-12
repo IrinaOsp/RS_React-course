@@ -11,7 +11,8 @@
     "preview": "vite preview",
     "prepare": "cd .. && husky install RS_React/.husky",
     "test": "vitest",
-    "coverage": "vitest run --coverage"
+    "coverage": "vitest run --coverage",
+    "husky-test": "vitest run"
   },
   "dependencies": {
     "localforage": "^1.10.0",
