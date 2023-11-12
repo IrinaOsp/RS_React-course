@@ -1,10 +1,9 @@
 import { Link, useSearchParams } from 'react-router-dom';
-import { ISearchResponseItem } from '../types/types';
+import { ISearchResponseItem } from '../../types/types';
 
 export default function Card(data: ISearchResponseItem) {
   const { name, id, height, weight, sprites } = data;
   const [searchParams] = useSearchParams();
-
   return (
     <Link to={`/${id}?${searchParams}`} style={{ color: 'inherit' }}>
       <div className="search-item">

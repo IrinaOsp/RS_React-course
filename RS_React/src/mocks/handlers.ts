@@ -35,7 +35,7 @@ const items = [
 export const handlers = [
   http.get(`${baseURL}:id`, ({ params }) => {
     const { id } = params;
-    return HttpResponse.json(items.filter((item) => item.id === +id));
+    return HttpResponse.json(items.filter((item) => item.id === +id)[0]);
   }),
 
   http.get(`${baseURL}`, ({ request }) => {
@@ -49,19 +49,19 @@ export const handlers = [
       results: [
         {
           name: 'bulbasaurTest',
-          url: `${baseURL}1`,
+          url: `${baseURL}9`,
         },
         {
           name: 'ivysaurTest',
-          url: `${baseURL}2`,
+          url: `${baseURL}10`,
         },
         {
           name: 'venusaurTest',
-          url: `${baseURL}3`,
+          url: `${baseURL}11`,
         },
         {
           name: 'charmanderTest',
-          url: `${baseURL}4`,
+          url: `${baseURL}12`,
         },
       ],
     });

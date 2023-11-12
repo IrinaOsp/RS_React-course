@@ -5,6 +5,7 @@ import { SearchContext, ISearchContext } from '../../context/Context';
 import { baseURL } from '../../data/data';
 import { ISearchResponseItem, TypeSearchResponse } from '../../types/types';
 import { BrowserRouter } from 'react-router-dom';
+import '../../mocks/server';
 
 const MockSearchResults = () => {
   return (

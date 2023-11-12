@@ -1,5 +1,5 @@
 import { useContext, useEffect, useState } from 'react';
-import Card from '../Card';
+import Card from '../Card/Card';
 import LoadingSpinner from '../LoadingSpinner/LoadingSpinner';
 import { SearchContext } from '../../context/Context';
 import './SearchResults.css';
@@ -18,7 +18,6 @@ export default function SearchResults() {
             const response = await fetch(item.url);
             return response.ok ? response.json() : null;
           } catch (error) {
-            console.error('fetch error: ', error);
             return null;
           }
         })
@@ -42,7 +41,7 @@ export default function SearchResults() {
         {!isLoading &&
           queryResponse &&
           dataToRenderCard &&
-          dataToRenderCard.map((item) => <Card key={item.name} {...item} />)}
+          dataToRenderCard.map((item) => <Card key={item.id} {...item} />)}
 
         {!isLoading &&
           queryResponse &&
