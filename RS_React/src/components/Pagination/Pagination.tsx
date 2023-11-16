@@ -10,17 +10,19 @@ export default function Pagination() {
   const {
     // currentPageNumber,
     // updateCurrentPageNumber,
-    itemsPerPage,
-    updateItemsPerPage,
+    // itemsPerPage,
+    // updateItemsPerPage,
     queryResponse,
   } = useContext(SearchContext);
   const [searchParams, setSearchParams] = useSearchParams();
   const currentPageNumber = useSelector((state: RootState) => state.pagination.currentPage);
+  const itemsPerPage = useSelector((state: RootState) => state.pagination.itemsPerPage);
   const dispatch = useDispatch();
 
   const totalPages = queryResponse && 'count' in queryResponse ? queryResponse.count : 1;
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    updateItemsPerPage(+e.target.value);
+    // updateItemsPerPage(+e.target.value);
+    dispatch(setToNumber(+e.target.value));
   };
 
   const handleSubmit = (e: React.KeyboardEvent<HTMLFormElement>): void => {
