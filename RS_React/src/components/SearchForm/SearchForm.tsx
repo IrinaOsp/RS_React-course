@@ -1,26 +1,36 @@
-import { ChangeEvent, useContext } from 'react';
+import { ChangeEvent, useEffect, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import ThrowErrorButton from '../ThrowErrorButton';
 import './SearchForm.css';
-import { SearchContext } from '../../context/Context';
+import { useDispatch, useSelector } from 'react-redux';
+import { RootState } from '../../state/store';
+import { updateSearchText } from '../../state/search/searchSlice';
 
 export function SearchForm() {
   // const [inputValue, setInputValue] = useState(localStorage.getItem('myValue') || '');
-  const { searchText, updateSearchText } = useContext(SearchContext);
+  const [inputText, setInputText] = useState('');
   const [, setSearchParams] = useSearchParams();
+  const dispatch = useDispatch();
+  const searchText = useSelector((state: RootState) => state.search.searchText);
 
   const handleInputChange = (e: ChangeEvent<HTMLInputElement>): void => {
-    updateSearchText(e.target.value);
+    setInputText(e.target.value);
   };
+
+  useEffect(() => {
+    setInputText(searchText);
+    setSearchParams({ search: searchText });
+  }, [searchText]);
 
   const handleSearch = (e: React.FormEvent<HTMLFormElement>): void => {
     e.preventDefault();
-    const inputElement = (e.target as HTMLFormElement).elements.namedItem('search');
-    const value = inputElement instanceof HTMLInputElement ? inputElement.value : '';
+    dispatch(updateSearchText(inputText));
+    // const inputElement = (e.target as HTMLFormElement).elements.namedItem('search');
+    // const value = inputElement instanceof HTMLInputElement ? inputElement.value : '';
 
-    if (localStorage.getItem('search') !== value) localStorage.setItem('search', value || '');
-    updateSearchText(value);
-    setSearchParams({ search: value });
+    // if (localStorage.getItem('search') !== value) localStorage.setItem('search', value || '');
+    // updateSearchText(value);
+    setSearchParams({ search: inputText });
   };
 
   return (
@@ -30,7 +40,7 @@ export function SearchForm() {
         name="search"
         id="search"
         placeholder="Enter text"
-        value={searchText}
+        value={inputText}
         onChange={handleInputChange}
       />
       <button type="submit">Search</button>
