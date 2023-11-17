@@ -3,7 +3,7 @@ import { RouterProvider, createBrowserRouter } from 'react-router-dom';
 import './App.css';
 import Main from './pages/Main/Main';
 import DetailedCard from './components/DetailedCard/DetailedCard';
-import Page404 from './components/Page404/Page404';
+import Page404 from './pages/Page404/Page404';
 import ErrorBoundary from './components/ErrorBoundary';
 
 const router = createBrowserRouter([
