@@ -14,10 +14,6 @@ export default class ErrorBoundary extends Component<PropsWithChildren, ErrorBou
   }
 
   render(): ReactNode {
-    // if (this.state.hasError) {
-    //   return <ErrorMessage />;
-    // }
-    // return this.props.children;
     return <ErrorMessage />;
   }
 }

@@ -12,7 +12,7 @@
     "prepare": "cd .. && husky install RS_React/.husky",
     "test": "vitest",
     "coverage": "vitest run --coverage",
-    "husky-test": "vitest"
+    "pre-push": "vitest --no-watch"
   },
   "dependencies": {
     "@reduxjs/toolkit": "^1.9.7",

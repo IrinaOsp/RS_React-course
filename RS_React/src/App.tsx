@@ -1,7 +1,7 @@
 import { ReactNode } from 'react';
 import { RouterProvider, createBrowserRouter } from 'react-router-dom';
 import './App.css';
-import Main from './components/Main/Main';
+import Main from './pages/Main/Main';
 import DetailedCard from './components/DetailedCard/DetailedCard';
 import Page404 from './components/Page404/Page404';
 import ErrorBoundary from './components/ErrorBoundary';
