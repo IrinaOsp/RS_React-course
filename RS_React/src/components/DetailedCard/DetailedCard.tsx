@@ -1,30 +1,14 @@
-// import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-
-// import { baseURL } from '../../data/data';
 import LoadingSpinner from '../LoadingSpinner/LoadingSpinner';
-
-import './DetailedCard.css';
 import { ISearchResponseItemDetailed } from '../../types/types';
 import { useGetPokemonDetailsQuery } from '../../api/itemsAPI';
+import './DetailedCard.css';
 
 export default function DetailedCard() {
   const { id } = useParams();
   const navigate = useNavigate();
-  // const [isLoading, setIsLoading] = useState(false);
-  // const [data, setData] = useState<ISearchResponseItemDetailed | null>(null);
   const { data, isLoading, isError, isSuccess } = useGetPokemonDetailsQuery(id || '0');
   const detailedData: ISearchResponseItemDetailed = data ? data : {};
-  // useEffect(() => {
-  //   setIsLoading(true);
-  //   fetch(`${baseURL}${id}`)
-  //     .then((res) => (res.ok ? res.json() : console.warn(res.status)))
-  //     .then((itemData) => setData(itemData))
-  //     .then(() => setIsLoading(false))
-  //     .catch((e: ErrorResponse) => {
-  //       console.warn(`error in fetch detailed card: ${e}`);
-  //     });
-  // }, [id]);
 
   const handleClose = () => {
     navigate(-1 || '/');

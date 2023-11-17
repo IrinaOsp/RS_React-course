@@ -1,41 +1,46 @@
-import { useContext } from 'react';
+import { useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
-import { SearchContext } from '../../context/Context';
-import './Pagination.css';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../state/store';
 import { decrement, increment, setToNumber } from '../../state/pagination/paginationSlice';
+import { defaultItemsPerPage } from '../../data/data';
+import { useGetPokemonListQuery } from '../../api/itemsAPI';
+import './Pagination.css';
 
 export default function Pagination() {
-  const {
-    // currentPageNumber,
-    // updateCurrentPageNumber,
-    // itemsPerPage,
-    // updateItemsPerPage,
-    queryResponse,
-  } = useContext(SearchContext);
+  const [itemsPerPage, setItemsPerPage] = useState(defaultItemsPerPage);
   const [searchParams, setSearchParams] = useSearchParams();
+
   const currentPageNumber = useSelector((state: RootState) => state.pagination.currentPage);
-  const itemsPerPage = useSelector((state: RootState) => state.pagination.itemsPerPage);
   const dispatch = useDispatch();
 
-  const totalPages = queryResponse && 'count' in queryResponse ? queryResponse.count : 1;
+  if (searchParams.get('page')) {
+    dispatch(setToNumber({ key: 'currentPage', value: +searchParams.get('page')! }));
+  }
+  if (searchParams.get('page_size')) {
+    dispatch(setToNumber({ key: 'itemsPerPage', value: +searchParams.get('page_size')! }));
+  }
+
+  const offset = currentPageNumber && itemsPerPage ? (+currentPageNumber - 1) * +itemsPerPage : '0';
+  const search = useSelector((state: RootState) => state.search.searchText);
+  const { data } = useGetPokemonListQuery({ search, itemsPerPage, offset });
+  const totalPages = data && 'count' in data ? data.count : 1;
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    // updateItemsPerPage(+e.target.value);
-    dispatch(setToNumber(+e.target.value));
+    setItemsPerPage(+e.target.value);
   };
 
   const handleSubmit = (e: React.KeyboardEvent<HTMLFormElement>): void => {
     e.preventDefault();
-    dispatch(setToNumber(1));
-    setSearchParams({ page: currentPageNumber.toString(), page_size: itemsPerPage.toString() });
+    dispatch(setToNumber({ key: 'currentPage', value: 1 }));
+    dispatch(setToNumber({ key: 'itemsPerPage', value: itemsPerPage }));
+    setSearchParams({ page: '1', page_size: itemsPerPage.toString() });
   };
 
   const handlePrevClick = () => {
     if (currentPageNumber > 1) {
       dispatch(decrement());
       setSearchParams({
-        page: currentPageNumber.toString(),
+        page: (currentPageNumber - 1).toString(),
         page_size: itemsPerPage.toString(),
       });
     }
@@ -56,7 +61,7 @@ export default function Pagination() {
       <button onClick={handlePrevClick} disabled={currentPageNumber === 1}>
         prev
       </button>
-      <span>{searchParams.get('page') || 1}</span>
+      <span>{currentPageNumber || 1}</span>
       <button onClick={handleNextClick} disabled={currentPageNumber >= totalPages / +itemsPerPage}>
         next
       </button>

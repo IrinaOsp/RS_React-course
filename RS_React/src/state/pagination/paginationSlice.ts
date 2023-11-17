@@ -21,8 +21,11 @@ const paginationSlice = createSlice({
     decrement: (state) => {
       state.currentPage -= 1;
     },
-    setToNumber: (state, action: PayloadAction<number>) => {
-      state.currentPage = action.payload;
+    setToNumber: (
+      state,
+      action: PayloadAction<{ key: 'currentPage' | 'itemsPerPage'; value: number }>
+    ) => {
+      state[action.payload.key] = action.payload.value;
     },
   },
 });
