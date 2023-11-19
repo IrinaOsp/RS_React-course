@@ -9,7 +9,7 @@ export default function ErrorMessage(): ReactNode {
 
   return (
     <>
-      <p>Error occured</p>
+      <p>Error occurred</p>
       <button onClick={handleClick}>Go back to search</button>
     </>
   );
