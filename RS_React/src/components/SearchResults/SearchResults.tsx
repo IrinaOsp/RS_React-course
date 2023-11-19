@@ -1,52 +1,40 @@
-import { useContext, useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import Card from '../Card/Card';
 import LoadingSpinner from '../LoadingSpinner/LoadingSpinner';
-import { SearchContext } from '../../context/Context';
+import { useGetPokemonListQuery } from '../../api/itemsAPI';
+import { ISearchArrayItem } from '../../types/types';
+import { RootState } from '../../state/store';
 import './SearchResults.css';
+import { setIsLoading } from '../../state/loading/loadingSlice';
 
 export default function SearchResults() {
-  const { queryResponse, dataToRenderCard, updateDataToRenderCard } = useContext(SearchContext);
-  const [isLoading, setIsLoading] = useState(false);
+  const dispatch = useDispatch();
 
-  useEffect(() => {
-    setIsLoading(true);
+  const search = useSelector((state: RootState) => state.search.searchText);
+  const currentPageNumber = useSelector((state: RootState) => state.pagination.currentPage);
+  const itemsPerPage = useSelector((state: RootState) => state.pagination.itemsPerPage);
+  const offset = currentPageNumber && itemsPerPage ? (+currentPageNumber - 1) * +itemsPerPage : '0';
 
-    if (queryResponse && 'results' in queryResponse) {
-      Promise.all(
-        queryResponse.results.map(async (item) => {
-          try {
-            const response = await fetch(item.url);
-            return response.ok ? response.json() : null;
-          } catch (error) {
-            return null;
-          }
-        })
-      )
-        .then((res) => updateDataToRenderCard(res))
-        .then(() => setIsLoading(false));
-    }
-    if (queryResponse && 'id' in queryResponse) {
-      updateDataToRenderCard([queryResponse]);
-      setIsLoading(false);
-    }
+  const { data, isLoading, isError, isSuccess } = useGetPokemonListQuery({
+    search,
+    itemsPerPage,
+    offset,
+  });
 
-    if (queryResponse === null) setIsLoading(false);
-  }, [queryResponse]);
+  isLoading
+    ? dispatch(setIsLoading({ key: 'isCardLoading', value: true }))
+    : dispatch(setIsLoading({ key: 'isCardLoading', value: false }));
+
+  const queryResponse: ISearchArrayItem[] = data && 'results' in data ? data.results : [data];
 
   return (
     <div className="main-section">
       <div className="search-results">
         {isLoading && <LoadingSpinner />}
 
-        {!isLoading &&
-          queryResponse &&
-          dataToRenderCard &&
-          dataToRenderCard.map((item) => <Card key={item.id} {...item} />)}
+        {(!data || isError) && <p>No search results</p>}
 
-        {!isLoading &&
-          queryResponse &&
-          'results' in queryResponse &&
-          queryResponse.results.length === 0 && <p>No search results</p>}
+        {isSuccess && data && queryResponse.map((item) => <Card key={item.name} {...item} />)}
       </div>
     </div>
   );

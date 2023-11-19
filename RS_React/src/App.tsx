@@ -1,11 +1,10 @@
 import { ReactNode } from 'react';
 import { RouterProvider, createBrowserRouter } from 'react-router-dom';
 import './App.css';
-import Main from './components/Main/Main';
+import Main from './pages/Main/Main';
 import DetailedCard from './components/DetailedCard/DetailedCard';
-import Page404 from './components/Page404/Page404';
+import Page404 from './pages/Page404/Page404';
 import ErrorBoundary from './components/ErrorBoundary';
-import { SearchState } from './context/Context';
 
 const router = createBrowserRouter([
   {
@@ -14,7 +13,7 @@ const router = createBrowserRouter([
     element: <Main />,
     children: [
       {
-        path: ':id(\\d+)',
+        path: ':id',
         element: <DetailedCard />,
       },
     ],
@@ -26,11 +25,7 @@ const router = createBrowserRouter([
 ]);
 
 function App(): ReactNode {
-  return (
-    <SearchState>
-      <RouterProvider router={router} />
-    </SearchState>
-  );
+  return <RouterProvider router={router} />;
 }
 
 export default App;

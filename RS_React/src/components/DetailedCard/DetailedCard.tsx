@@ -1,27 +1,21 @@
-import { useEffect, useState } from 'react';
-import { ErrorResponse, useNavigate, useParams } from 'react-router-dom';
-
-import { baseURL } from '../../data/data';
+import { useNavigate, useParams } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
 import LoadingSpinner from '../LoadingSpinner/LoadingSpinner';
-
-import './DetailedCard.css';
 import { ISearchResponseItemDetailed } from '../../types/types';
+import { useGetPokemonDetailsQuery } from '../../api/itemsAPI';
+import './DetailedCard.css';
+import { setIsLoading } from '../../state/loading/loadingSlice';
 
 export default function DetailedCard() {
   const { id } = useParams();
   const navigate = useNavigate();
-  const [isLoading, setIsLoading] = useState(false);
-  const [data, setData] = useState<ISearchResponseItemDetailed | null>(null);
-  useEffect(() => {
-    setIsLoading(true);
-    fetch(`${baseURL}${id}`)
-      .then((res) => (res.ok ? res.json() : console.warn(res.status)))
-      .then((itemData) => setData(itemData))
-      .then(() => setIsLoading(false))
-      .catch((e: ErrorResponse) => {
-        console.warn(`error in fetch detailed card: ${e}`);
-      });
-  }, [id]);
+  const dispatch = useDispatch();
+  const { data, isLoading, isError, isSuccess } = useGetPokemonDetailsQuery(id || '0');
+  const detailedData: ISearchResponseItemDetailed = data ? data : {};
+
+  isLoading
+    ? dispatch(setIsLoading({ key: 'isDetailedCardLoading', value: true }))
+    : dispatch(setIsLoading({ key: 'isDetailedCardLoading', value: false }));
 
   const handleClose = () => {
     navigate(-1 || '/');
@@ -30,31 +24,36 @@ export default function DetailedCard() {
   return (
     <div className="detailed-card" data-testid="detailed-card">
       {isLoading && <LoadingSpinner />}
-      {data && (
+      {isSuccess && (
         <>
-          <span>Name: {data.name}</span>
-          <span>ID: {data.id}</span>
-          <span>Height: {data.height}</span>
-          <span>Weight: {data.weight}</span>
-          <span>Base experience: {data.base_experience}</span>
+          <span>Name: {detailedData.name}</span>
+          <span>ID: {detailedData.id}</span>
+          <span>Height: {detailedData.height}</span>
+          <span>Weight: {detailedData.weight}</span>
+          <span>Base experience: {detailedData.base_experience}</span>
           <p>
             Abilities:
-            {data.abilities.length
-              ? data.abilities.map((el) => <span key={el.ability.name}> {el.ability.name}; </span>)
+            {detailedData.abilities.length
+              ? detailedData.abilities.map((el) => (
+                  <span key={el.ability.name}> {el.ability.name}; </span>
+                ))
               : ' no'}
           </p>
           <p>
             Held items:
-            {data['held_items'].length
-              ? data['held_items'].map((el) => <span key={el.item.name}> {el.item.name}; </span>)
+            {detailedData['held_items'].length
+              ? detailedData['held_items'].map((el) => (
+                  <span key={el.item.name}> {el.item.name}; </span>
+                ))
               : ' no'}
           </p>
 
           <div className="detailed-img">
-            <img src={data.sprites.other['official-artwork'].front_default} alt="img" />
+            <img src={detailedData.sprites.other['official-artwork'].front_default} alt="img" />
           </div>
         </>
       )}
+      {isError && <span>Error in fetch detailed card</span>}
       <span className="detailed-card-close" onClick={handleClose}>
         X
       </span>

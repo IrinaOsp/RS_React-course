@@ -3,21 +3,27 @@ import { act, fireEvent, render, screen, waitFor } from '@testing-library/react'
 import DetailedCard from './DetailedCard';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import '../../mocks/server';
+import { Provider } from 'react-redux';
+import { store } from '../../state/store';
 
 const MockDetailedCard = () => {
   return (
-    <BrowserRouter>
-      <DetailedCard />
-    </BrowserRouter>
+    <Provider store={store}>
+      <BrowserRouter>
+        <DetailedCard />
+      </BrowserRouter>
+    </Provider>
   );
 };
 
 const MockDetailedCardWrapper = () => (
-  <BrowserRouter>
-    <Routes>
-      <Route path={`/:id`} element={<DetailedCard />} />
-    </Routes>
-  </BrowserRouter>
+  <Provider store={store}>
+    <BrowserRouter>
+      <Routes>
+        <Route path={`/:id`} element={<DetailedCard />} />
+      </Routes>
+    </BrowserRouter>
+  </Provider>
 );
 describe('DetailedCard', () => {
   it('displays loading spinner when data is loading', () => {
