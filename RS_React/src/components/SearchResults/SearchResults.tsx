@@ -25,9 +25,9 @@ export default function SearchResults() {
       <div className="search-results">
         {isLoading && <LoadingSpinner />}
 
-        {isSuccess && queryResponse.map((item) => <Card key={item.name} {...item} />)}
+        {(!data || isError) && <p>No search results</p>}
 
-        {isError && <p>No search results</p>}
+        {isSuccess && data && queryResponse.map((item) => <Card key={item.name} {...item} />)}
       </div>
     </div>
   );

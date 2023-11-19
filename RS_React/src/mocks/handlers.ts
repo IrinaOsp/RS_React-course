@@ -54,6 +54,11 @@ export const handlers = [
     const offset = url.searchParams.get('offset');
     if (!limit || !offset) return new HttpResponse(null, { status: 404 });
 
+    const search = url.searchParams.get('search');
+    if (search === 'noSuchResult') {
+      new HttpResponse('not found', { status: 404 });
+    }
+
     return HttpResponse.json({
       count: 1292,
       results: [
