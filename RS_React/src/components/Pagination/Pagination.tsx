@@ -3,15 +3,11 @@ import { useSearchParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../state/store';
 import { decrement, increment, setToNumber } from '../../state/pagination/paginationSlice';
-import { defaultItemsPerPage } from '../../data/data';
 import { useGetPokemonListQuery } from '../../api/itemsAPI';
 import './Pagination.css';
 
 export default function Pagination() {
-  const [itemsPerPage, setItemsPerPage] = useState(defaultItemsPerPage);
   const [searchParams, setSearchParams] = useSearchParams();
-
-  const currentPageNumber = useSelector((state: RootState) => state.pagination.currentPage);
   const dispatch = useDispatch();
 
   if (searchParams.get('page')) {
@@ -20,6 +16,10 @@ export default function Pagination() {
   if (searchParams.get('page_size')) {
     dispatch(setToNumber({ key: 'itemsPerPage', value: +searchParams.get('page_size')! }));
   }
+  const [itemsPerPage, setItemsPerPage] = useState(
+    useSelector((state: RootState) => state.pagination.itemsPerPage)
+  );
+  const currentPageNumber = useSelector((state: RootState) => state.pagination.currentPage);
 
   const offset = currentPageNumber && itemsPerPage ? (+currentPageNumber - 1) * +itemsPerPage : '0';
   const search = useSelector((state: RootState) => state.search.searchText);
