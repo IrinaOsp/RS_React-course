@@ -2,15 +2,16 @@ import { expect, describe, it } from 'vitest';
 import { fireEvent, render, screen } from '@testing-library/react';
 import { SearchForm } from './SearchForm';
 import { BrowserRouter } from 'react-router-dom';
-import { SearchState } from '../../context/Context';
+import { Provider } from 'react-redux';
+import { store } from '../../state/store';
 
 const MockSearchForm = () => {
   return (
-    <BrowserRouter>
-      <SearchState>
+    <Provider store={store}>
+      <BrowserRouter>
         <SearchForm />
-      </SearchState>
-    </BrowserRouter>
+      </BrowserRouter>
+    </Provider>
   );
 };
 

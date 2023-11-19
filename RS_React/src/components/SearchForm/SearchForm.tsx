@@ -19,8 +19,10 @@ export function SearchForm() {
   const searchFromParams = searchParams.get('search');
 
   useEffect(() => {
-    setInputText(searchParams.get('search') || '');
-    dispatch(updateSearchText(searchText));
+    if (searchFromParams) {
+      setInputText(searchFromParams);
+      dispatch(updateSearchText(searchText));
+    }
   }, [searchFromParams]);
 
   const handleSearch = (e: React.FormEvent<HTMLFormElement>): void => {
