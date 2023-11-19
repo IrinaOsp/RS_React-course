@@ -1,12 +1,14 @@
 import { configureStore } from '@reduxjs/toolkit';
 import paginationReducer from './pagination/paginationSlice';
 import searchReducer from './search/searchSlice';
+import loadingReducer from './loading/loadingSlice';
 import { itemsAPI } from '../api/itemsAPI';
 
 export const store = configureStore({
   reducer: {
     pagination: paginationReducer,
     search: searchReducer,
+    loading: loadingReducer,
     [itemsAPI.reducerPath]: itemsAPI.reducer,
   },
   middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(itemsAPI.middleware),
