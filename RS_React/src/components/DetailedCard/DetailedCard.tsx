@@ -1,14 +1,21 @@
 import { useNavigate, useParams } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
 import LoadingSpinner from '../LoadingSpinner/LoadingSpinner';
 import { ISearchResponseItemDetailed } from '../../types/types';
 import { useGetPokemonDetailsQuery } from '../../api/itemsAPI';
 import './DetailedCard.css';
+import { setIsLoading } from '../../state/loading/loadingSlice';
 
 export default function DetailedCard() {
   const { id } = useParams();
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const { data, isLoading, isError, isSuccess } = useGetPokemonDetailsQuery(id || '0');
   const detailedData: ISearchResponseItemDetailed = data ? data : {};
+
+  isLoading
+    ? dispatch(setIsLoading({ key: 'isDetailedCardLoading', value: true }))
+    : dispatch(setIsLoading({ key: 'isDetailedCardLoading', value: false }));
 
   const handleClose = () => {
     navigate(-1 || '/');

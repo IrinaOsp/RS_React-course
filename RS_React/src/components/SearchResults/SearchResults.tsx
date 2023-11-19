@@ -1,12 +1,15 @@
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import Card from '../Card/Card';
 import LoadingSpinner from '../LoadingSpinner/LoadingSpinner';
 import { useGetPokemonListQuery } from '../../api/itemsAPI';
 import { ISearchArrayItem } from '../../types/types';
 import { RootState } from '../../state/store';
 import './SearchResults.css';
+import { setIsLoading } from '../../state/loading/loadingSlice';
 
 export default function SearchResults() {
+  const dispatch = useDispatch();
+
   const search = useSelector((state: RootState) => state.search.searchText);
   const currentPageNumber = useSelector((state: RootState) => state.pagination.currentPage);
   const itemsPerPage = useSelector((state: RootState) => state.pagination.itemsPerPage);
@@ -17,6 +20,10 @@ export default function SearchResults() {
     itemsPerPage,
     offset,
   });
+
+  isLoading
+    ? dispatch(setIsLoading({ key: 'isCardLoading', value: true }))
+    : dispatch(setIsLoading({ key: 'isCardLoading', value: false }));
 
   const queryResponse: ISearchArrayItem[] = data && 'results' in data ? data.results : [data];
 
