@@ -4,7 +4,7 @@ import LoadingSpinner from '../LoadingSpinner/LoadingSpinner';
 import { useGetPokemonListQuery } from '../../api/itemsAPI';
 import { ISearchArrayItem } from '../../types/types';
 import { RootState } from '../../state/store';
-import './SearchResults.css';
+import styles from './SearchResults.module.css';
 import { setIsLoading } from '../../state/loading/loadingSlice';
 
 export default function SearchResults() {
@@ -28,8 +28,8 @@ export default function SearchResults() {
   const queryResponse: ISearchArrayItem[] = data && 'results' in data ? data.results : [data];
 
   return (
-    <div className="main-section">
-      <div className="search-results">
+    <div className={styles.mainSection}>
+      <div className={styles.searchResults}>
         {isLoading && <LoadingSpinner />}
 
         {(!data || isError) && <p>No search results</p>}
