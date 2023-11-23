@@ -9,6 +9,6 @@
   cursor: not-allowed;
 }
 
-#items-per-page {
+.itemsPerPage {
   margin-right: 20px;
 }

@@ -1,9 +1,13 @@
+import { Provider } from 'react-redux';
 import ErrorBoundary from '../components/ErrorBoundary';
+import { store } from '../state/store';
 
 function MyApp({ Component, pageProps }) {
   return (
     <ErrorBoundary>
-      <Component {...pageProps} />
+      <Provider store={store}>
+        <Component {...pageProps} />
+      </Provider>
     </ErrorBoundary>
   );
 }
