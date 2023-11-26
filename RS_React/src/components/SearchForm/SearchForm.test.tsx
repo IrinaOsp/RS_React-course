@@ -1,39 +1,34 @@
-import { expect, describe, it } from 'vitest';
+import { expect, describe, it, vi } from 'vitest';
 import { fireEvent, render, screen } from '@testing-library/react';
 import { SearchForm } from './SearchForm';
-import { BrowserRouter } from 'react-router-dom';
-import { Provider } from 'react-redux';
-import { store } from '../../state/store';
-
-const MockSearchForm = () => {
-  return (
-    <Provider store={store}>
-      <BrowserRouter>
-        <SearchForm />
-      </BrowserRouter>
-    </Provider>
-  );
-};
+import mockRouter from 'next-router-mock';
 
 describe('SearchForm', async () => {
-  it('checks if the entered value is saved to the local storage', () => {
-    render(<MockSearchForm />);
-    const inputElement = screen.getByPlaceholderText(/enter text/i);
-    fireEvent.click(inputElement);
-    const searchFormElement = screen.getByTitle('search-form');
-    fireEvent.submit(searchFormElement);
-    const searchText = 'ditto';
-    fireEvent.change(inputElement, { target: { value: searchText } });
+  it('search form takes input event value', async () => {
+    vi.mock('next/router', () => ({
+      useRouter: () => ({
+        pathname: '/',
+        query: {},
+        push: vi.fn().mockImplementation(async () => ({ success: true })),
+      }),
+      useDispatch: () => vi.fn(),
+    }));
 
-    const ls = localStorage.getItem('search') || '';
-    expect(inputElement).toHaveTextContent(ls);
+    render(<SearchForm />);
+    const input = (await screen.findByRole('textbox')) as HTMLInputElement;
+    const button = screen.getByText('Search');
+    const searchText = 'ditto';
+
+    fireEvent.change(input, { target: { value: searchText } });
+    fireEvent.click(button);
+    expect(input.value).toBe(searchText);
   });
 
-  it('retrieves the value from the local storage upon mounting', () => {
-    localStorage.setItem('search', 'testSearchForm');
-    const ls = localStorage.getItem('search') || '';
-    render(<MockSearchForm />);
-    const input = screen.getByPlaceholderText('Enter text') as HTMLInputElement;
-    expect(input.value).toEqual(ls);
+  it('gets the value from the query params upon mounting', async () => {
+    mockRouter.push('?search=ditto');
+
+    render(<SearchForm />);
+    const input = screen.getByRole('textbox') as HTMLInputElement;
+    expect(input.value).toEqual('ditto');
   });
 });
