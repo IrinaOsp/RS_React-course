@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { act, fireEvent, render, screen, waitFor } from '@testing-library/react';
-import DetailedCard from './DetailedCard';
+import DetailedCard from '../../pages/[id]/DetailedCard';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import '../../mocks/server';
 import { Provider } from 'react-redux';

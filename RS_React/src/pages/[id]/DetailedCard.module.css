@@ -1,4 +1,4 @@
-.detailed-card {
+.detailedCard {
   position: relative;
   top: -20px;
   right: 0;
@@ -13,20 +13,20 @@
   box-shadow: 10px 5px 5px gray;
 }
 
-.detailed-card span:first-child {
+.detailedCard span:first-child {
   margin-top: 100px;
 }
 
-.detailed-img {
+.detailedImg {
   width: 100%;
 }
 
-.detailed-img img {
+.detailedImg img {
   width: 50%;
   height: auto;
 }
 
-.detailed-card-close {
+.detailedCardClose {
   position: absolute;
   width: 20px;
   height: 20px;
@@ -40,7 +40,7 @@
   cursor: pointer;
 }
 
-.close-background {
+.closeBackground {
   position: fixed;
   transform: translate(-65%);
   width: 100%;

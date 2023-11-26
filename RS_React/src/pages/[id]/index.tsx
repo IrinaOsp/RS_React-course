@@ -1,16 +1,16 @@
-import { useNavigate, useParams } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
-import LoadingSpinner from '../LoadingSpinner/LoadingSpinner';
+import LoadingSpinner from '../../components/LoadingSpinner/LoadingSpinner';
 import { ISearchResponseItemDetailed } from '../../types/types';
 import { useGetPokemonDetailsQuery } from '../../api/itemsAPI';
-import './DetailedCard.css';
+import styles from './DetailedCard.module.css';
 import { setIsLoading } from '../../state/loading/loadingSlice';
+import { useRouter } from 'next/router';
 
 export default function DetailedCard() {
-  const { id } = useParams();
-  const navigate = useNavigate();
+  const router = useRouter();
+  const id = typeof router.query.id === 'string' ? router.query.id : '0';
   const dispatch = useDispatch();
-  const { data, isLoading, isError, isSuccess } = useGetPokemonDetailsQuery(id || '0');
+  const { data, isLoading, isError, isSuccess } = useGetPokemonDetailsQuery(id);
   const detailedData: ISearchResponseItemDetailed = data ? data : {};
 
   isLoading
@@ -18,11 +18,11 @@ export default function DetailedCard() {
     : dispatch(setIsLoading({ key: 'isDetailedCardLoading', value: false }));
 
   const handleClose = () => {
-    navigate(-1 || '/');
+    router.push('/');
   };
 
   return (
-    <div className="detailed-card" data-testid="detailed-card">
+    <div className={styles.detailedCard} data-testid="detailed-card">
       {isLoading && <LoadingSpinner />}
       {isSuccess && (
         <>
@@ -48,16 +48,16 @@ export default function DetailedCard() {
               : ' no'}
           </p>
 
-          <div className="detailed-img">
+          <div className={styles.detailedImg}>
             <img src={detailedData.sprites.other['official-artwork'].front_default} alt="img" />
           </div>
         </>
       )}
       {isError && <span>Error in fetch detailed card</span>}
-      <span className="detailed-card-close" onClick={handleClose}>
+      <span className={styles.detailedCardClose} onClick={handleClose}>
         X
       </span>
-      <div className="close-background" onClick={handleClose} />
+      <div className={styles.closeBackground} onClick={handleClose} />
     </div>
   );
 }

@@ -1,20 +1,19 @@
-import type { Metadata } from 'next';
 import Head from 'next/head';
+import Pagination from './Pagination/Pagination';
+import { SearchForm } from './SearchForm/SearchForm';
 
-export const metadata: Metadata = {
-  title: 'Pokemon search',
-  description: 'App to practice NextJS',
-};
-
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+export function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en">
+    <>
       <Head>
+        <title>Pokemon search</title>
         <link rel="icon" href="/favicon.ico" type="image/x-icon" />
       </Head>
-      <body>
-        <main>{children}</main>
-      </body>
-    </html>
+      <main>
+        <SearchForm />
+        <Pagination />
+        <div>{children}</div>
+      </main>
+    </>
   );
 }
