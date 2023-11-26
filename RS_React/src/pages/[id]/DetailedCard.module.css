@@ -3,6 +3,7 @@
   top: -20px;
   right: 0;
   min-width: 30vw;
+  width: 50%;
   min-height: 100%;
   display: flex;
   flex-direction: column;

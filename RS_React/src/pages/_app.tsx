@@ -4,7 +4,6 @@ import type { NextPage } from 'next';
 import type { AppProps } from 'next/app';
 import ErrorBoundary from '../components/ErrorBoundary';
 import { wrapper } from '../state/store';
-import { RootLayout } from '../components/layout';
 
 export type NextPageWithLayout<P = object, IP = P> = NextPage<P, IP> & {
   getLayout?: (page: ReactElement) => ReactNode;
@@ -19,9 +18,7 @@ function MyApp({ Component, pageProps }: AppPropsWithLayout) {
   return (
     <ErrorBoundary>
       <Provider store={store}>
-        <RootLayout>
-          <Component {...pageProps} />
-        </RootLayout>
+        <Component {...pageProps} />
       </Provider>
     </ErrorBoundary>
   );

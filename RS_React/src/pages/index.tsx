@@ -1,5 +1,5 @@
 import { itemsAPI } from '../api/itemsAPI';
-import SearchResults from '../components/SearchResults/SearchResults';
+import { RootLayout } from '../components/layout';
 import { wrapper } from '../state/store';
 import { ISearchArrayItem, ISearchResponseArray } from '../types/types';
 
@@ -8,11 +8,7 @@ type Props = {
 };
 
 export default function Home({ searchResults }: Props) {
-  return (
-    <>
-      <SearchResults data={searchResults} />
-    </>
-  );
+  return <RootLayout searchResults={searchResults} />;
 }
 
 export const getServerSideProps = wrapper.getServerSideProps((store) => async (context) => {

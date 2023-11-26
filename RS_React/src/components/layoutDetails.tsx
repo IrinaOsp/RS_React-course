@@ -4,11 +4,11 @@ import { SearchForm } from './SearchForm/SearchForm';
 import SearchResults from './SearchResults/SearchResults';
 import { ISearchArrayItem, ISearchResponseArray } from '../types/types';
 
-export function RootLayout({
-  searchResults,
-}: {
+type RootLayoutProps = {
+  children: React.ReactNode;
   searchResults: ISearchArrayItem | ISearchResponseArray;
-}) {
+};
+export function RootLayoutDetails({ children, searchResults }: RootLayoutProps) {
   return (
     <>
       <Head>
@@ -19,6 +19,7 @@ export function RootLayout({
         <SearchForm />
         <Pagination />
         <SearchResults data={searchResults} />
+        <div>{children}</div>
       </main>
     </>
   );
