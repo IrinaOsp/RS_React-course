@@ -1,5 +1,28 @@
 import { HttpResponse, http } from 'msw';
 import { baseURL } from '../data/data';
+import { ISearchResponseArray } from '../types/types';
+
+export const mockCardList: ISearchResponseArray = {
+  count: 1292,
+  results: [
+    {
+      name: 'bulbasaurTest',
+      url: `${baseURL}9`,
+    },
+    {
+      name: 'ivysaurTest',
+      url: `${baseURL}10`,
+    },
+    {
+      name: 'venusaurTest',
+      url: `${baseURL}11`,
+    },
+    {
+      name: 'charmanderTest',
+      url: `${baseURL}12`,
+    },
+  ],
+};
 
 const items = [
   {
@@ -59,27 +82,7 @@ export const handlers = [
       new HttpResponse('not found', { status: 404 });
     }
 
-    return HttpResponse.json({
-      count: 1292,
-      results: [
-        {
-          name: 'bulbasaurTest',
-          url: `${baseURL}9`,
-        },
-        {
-          name: 'ivysaurTest',
-          url: `${baseURL}10`,
-        },
-        {
-          name: 'venusaurTest',
-          url: `${baseURL}11`,
-        },
-        {
-          name: 'charmanderTest',
-          url: `${baseURL}12`,
-        },
-      ],
-    });
+    return HttpResponse.json(mockCardList);
   }),
   // http.get(`${baseURL}10`, () => {
   //   return HttpResponse.json({
