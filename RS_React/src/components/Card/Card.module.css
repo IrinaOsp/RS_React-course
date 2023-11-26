@@ -1,7 +1,7 @@
 .searchItem {
   display: flex;
   flex-direction: column;
-  padding: 5px;
+  padding: 10px;
   border: 1px gray solid;
   border-radius: 10px;
   box-shadow: 10px 5px 5px gray;

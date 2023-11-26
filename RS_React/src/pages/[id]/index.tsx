@@ -1,4 +1,3 @@
-// import LoadingSpinner from '../../components/LoadingSpinner/LoadingSpinner';
 import { ISearchResponseItemDetailed } from '../../types/types';
 import { itemsAPI } from '../../api/itemsAPI';
 import styles from './DetailedCard.module.css';
@@ -14,9 +13,6 @@ type Props = {
 
 export default function DetailedCard({ searchResults, detailedData }: Props) {
   const router = useRouter();
-  // const id = typeof router.query.id === 'string' ? router.query.id : '0';
-  // const { data, isLoading, isError, isSuccess } = useGetPokemonDetailsQuery(id);
-  // const detailedData: ISearchResponseItemDetailed = data ? data : {};
 
   const handleClose = () => {
     router.push('/');
@@ -24,41 +20,42 @@ export default function DetailedCard({ searchResults, detailedData }: Props) {
 
   return (
     <RootLayoutDetails searchResults={searchResults}>
-      <div className={styles.detailedCard} data-testid="detailed-card">
-        {/* {isLoading && <LoadingSpinner />} */}
-        {detailedData && (
-          <>
-            <span>Name: {detailedData.name}</span>
-            <span>ID: {detailedData.id}</span>
-            <span>Height: {detailedData.height}</span>
-            <span>Weight: {detailedData.weight}</span>
-            <span>Base experience: {detailedData.base_experience}</span>
-            <p>
-              Abilities:
-              {detailedData.abilities.length
-                ? detailedData.abilities.map((el) => (
-                    <span key={el.ability.name}> {el.ability.name}; </span>
-                  ))
-                : ' no'}
-            </p>
-            <p>
-              Held items:
-              {detailedData['held_items'].length
-                ? detailedData['held_items'].map((el) => (
-                    <span key={el.item.name}> {el.item.name}; </span>
-                  ))
-                : ' no'}
-            </p>
+      <div data-testid="detailed-card">
+        <div className={styles.detailedCardWrapper}>
+          {detailedData && (
+            <div className={styles.detailedCard}>
+              <span>Name: {detailedData.name}</span>
+              <span>ID: {detailedData.id}</span>
+              <span>Height: {detailedData.height}</span>
+              <span>Weight: {detailedData.weight}</span>
+              <span>Base experience: {detailedData.base_experience}</span>
+              <p>
+                Abilities:
+                {detailedData.abilities.length
+                  ? detailedData.abilities.map((el) => (
+                      <span key={el.ability.name}> {el.ability.name}; </span>
+                    ))
+                  : ' no'}
+              </p>
+              <p>
+                Held items:
+                {detailedData['held_items'].length
+                  ? detailedData['held_items'].map((el) => (
+                      <span key={el.item.name}> {el.item.name}; </span>
+                    ))
+                  : ' no'}
+              </p>
 
-            <div className={styles.detailedImg}>
-              <img src={detailedData.sprites.other['official-artwork'].front_default} alt="img" />
+              <div className={styles.detailedImg}>
+                <img src={detailedData.sprites.other['official-artwork'].front_default} alt="img" />
+              </div>
             </div>
-          </>
-        )}
-        {!detailedData && <span>Error in fetch detailed card</span>}
-        <span className={styles.detailedCardClose} onClick={handleClose}>
-          X
-        </span>
+          )}
+          {!detailedData && <span>Error in fetch detailed card</span>}
+          <span className={styles.detailedCardClose} onClick={handleClose}>
+            X
+          </span>
+        </div>
         <div className={styles.closeBackground} onClick={handleClose} />
       </div>
     </RootLayoutDetails>

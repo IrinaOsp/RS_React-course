@@ -15,7 +15,7 @@ export function RootLayout({
         <title>Pokemon search</title>
         <link rel="icon" href="/favicon.ico" type="image/x-icon" />
       </Head>
-      <main>
+      <main style={{ display: 'flex', flexDirection: 'column' }}>
         <SearchForm />
         <Pagination />
         <SearchResults data={searchResults} />

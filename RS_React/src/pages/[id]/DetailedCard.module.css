@@ -1,25 +1,31 @@
+.detailedCardWrapper {
+  position: relative;
+  max-width: fit-content;
+}
+
 .detailedCard {
   position: relative;
-  top: -20px;
-  right: 0;
-  min-width: 30vw;
-  width: 50%;
   min-height: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;
+  gap: 10px;
   padding: 5px;
   border: 1px gray solid;
   border-radius: 10px;
+  background-color: white;
   box-shadow: 10px 5px 5px gray;
+  z-index: 11;
 }
 
 .detailedCard span:first-child {
-  margin-top: 100px;
+  margin-top: 40px;
 }
 
 .detailedImg {
-  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .detailedImg img {
@@ -38,13 +44,16 @@
   border: 1px solid gray;
   border-radius: 50%;
   line-height: 20px;
+  text-align: center;
   cursor: pointer;
+  z-index: 12;
 }
 
 .closeBackground {
   position: fixed;
-  transform: translate(-65%);
-  width: 100%;
+  top: 0;
+  left: 0;
+  width: 100vw;
   height: 100vh;
   background-color: rgba(0, 0, 0, 0.5);
   z-index: 10;
