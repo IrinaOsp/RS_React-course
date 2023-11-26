@@ -1,20 +1,24 @@
+'use client';
+
 import { useState } from 'react';
-import { useSearchParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../state/store';
 import { decrement, increment, setToNumber } from '../../state/pagination/paginationSlice';
 import { useGetPokemonListQuery } from '../../api/itemsAPI';
-import './Pagination.css';
+import styles from './Pagination.module.css';
+import { useRouter } from 'next/router';
 
 export default function Pagination() {
-  const [searchParams, setSearchParams] = useSearchParams();
+  const router = useRouter();
+  const urlPageQuery = router.query.search || '';
+  const urlPageSizeQuery = router.query.search || '';
   const dispatch = useDispatch();
 
-  if (searchParams.get('page')) {
-    dispatch(setToNumber({ key: 'currentPage', value: +searchParams.get('page')! }));
+  if (urlPageQuery && typeof urlPageQuery === 'string') {
+    dispatch(setToNumber({ key: 'currentPage', value: +urlPageQuery }));
   }
-  if (searchParams.get('page_size')) {
-    dispatch(setToNumber({ key: 'itemsPerPage', value: +searchParams.get('page_size')! }));
+  if (urlPageSizeQuery && typeof urlPageSizeQuery === 'string') {
+    dispatch(setToNumber({ key: 'itemsPerPage', value: +urlPageSizeQuery }));
   }
   const [itemsPerPage, setItemsPerPage] = useState(
     useSelector((state: RootState) => state.pagination.itemsPerPage)
@@ -33,31 +37,25 @@ export default function Pagination() {
     e.preventDefault();
     dispatch(setToNumber({ key: 'currentPage', value: 1 }));
     dispatch(setToNumber({ key: 'itemsPerPage', value: itemsPerPage }));
-    setSearchParams({ page: '1', page_size: itemsPerPage.toString() });
+    router.push(`/?page=1&page_size=${itemsPerPage}`);
   };
 
   const handlePrevClick = () => {
     if (currentPageNumber > 1) {
       dispatch(decrement());
-      setSearchParams({
-        page: (currentPageNumber - 1).toString(),
-        page_size: itemsPerPage.toString(),
-      });
+      router.push(`/?page=${currentPageNumber - 1}&page_size=${itemsPerPage}`);
     }
   };
 
   const handleNextClick = () => {
     if (currentPageNumber < totalPages) {
       dispatch(increment());
-      setSearchParams({
-        page: (currentPageNumber + 1).toString(),
-        page_size: itemsPerPage.toString(),
-      });
+      router.push(`/?page=${currentPageNumber + 1}&page_size=${itemsPerPage}`);
     }
   };
 
   return (
-    <div className="pagination">
+    <div className={styles.pagination}>
       <button onClick={handlePrevClick} disabled={currentPageNumber === 1}>
         prev
       </button>
@@ -75,6 +73,7 @@ export default function Pagination() {
           max={100}
           value={itemsPerPage}
           onChange={handleChange}
+          className={styles.itemsPerPage}
         />
         <button type="submit">Change items number</button>
       </form>

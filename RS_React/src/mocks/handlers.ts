@@ -1,5 +1,46 @@
 import { HttpResponse, http } from 'msw';
 import { baseURL } from '../data/data';
+import { ISearchResponseArray, ISearchResponseItemDetailed } from '../types/types';
+
+export const mockCardList: ISearchResponseArray = {
+  count: 1292,
+  results: [
+    {
+      name: 'bulbasaurTest',
+      url: `${baseURL}9`,
+    },
+    {
+      name: 'ivysaurTest',
+      url: `${baseURL}10`,
+    },
+    {
+      name: 'venusaurTest',
+      url: `${baseURL}11`,
+    },
+    {
+      name: 'charmanderTest',
+      url: `${baseURL}12`,
+    },
+  ],
+};
+
+export const mockDetailedCard: ISearchResponseItemDetailed = {
+  name: 'bulbasaurTest',
+  height: 7,
+  id: 9,
+  weight: 69,
+  base_experience: 64,
+  abilities: [{ ability: { name: 'overgrow' } }],
+  held_items: [{ item: { name: '' } }],
+  sprites: {
+    front_default: 'img',
+    other: {
+      'official-artwork': {
+        front_default: 'img',
+      },
+    },
+  },
+};
 
 const items = [
   {
@@ -59,27 +100,7 @@ export const handlers = [
       new HttpResponse('not found', { status: 404 });
     }
 
-    return HttpResponse.json({
-      count: 1292,
-      results: [
-        {
-          name: 'bulbasaurTest',
-          url: `${baseURL}9`,
-        },
-        {
-          name: 'ivysaurTest',
-          url: `${baseURL}10`,
-        },
-        {
-          name: 'venusaurTest',
-          url: `${baseURL}11`,
-        },
-        {
-          name: 'charmanderTest',
-          url: `${baseURL}12`,
-        },
-      ],
-    });
+    return HttpResponse.json(mockCardList);
   }),
   // http.get(`${baseURL}10`, () => {
   //   return HttpResponse.json({

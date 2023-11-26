@@ -1,48 +1,29 @@
-import { ChangeEvent, useEffect, useState } from 'react';
-import { useSearchParams } from 'react-router-dom';
-import { useDispatch, useSelector } from 'react-redux';
+'use client';
+
+import { useState } from 'react';
 import ThrowErrorButton from '../ThrowErrorButton';
-import { RootState } from '../../state/store';
-import { updateSearchText } from '../../state/search/searchSlice';
-import './SearchForm.css';
+import styles from './SearchForm.module.css';
+import { useRouter } from 'next/router';
 
 export function SearchForm() {
-  const [inputText, setInputText] = useState(localStorage.getItem('search') || '');
-  const [searchParams, setSearchParams] = useSearchParams();
-  const dispatch = useDispatch();
-  const searchText = useSelector((state: RootState) => state.search.searchText);
-
-  const handleInputChange = (e: ChangeEvent<HTMLInputElement>): void => {
-    setInputText(e.target.value);
-  };
-
-  const searchFromParams = searchParams.get('search');
-
-  useEffect(() => {
-    if (searchFromParams) {
-      setInputText(searchFromParams);
-      dispatch(updateSearchText(searchText));
-    }
-  }, [searchFromParams]);
+  const [inputText, setInputText] = useState<string>('');
+  const router = useRouter();
+  const urlSearchQuery = router.query.search || '';
 
   const handleSearch = (e: React.FormEvent<HTMLFormElement>): void => {
     e.preventDefault();
-    dispatch(updateSearchText(inputText));
-
-    if (inputText && localStorage.getItem('search') !== inputText)
-      localStorage.setItem('search', inputText);
-    setSearchParams({ search: inputText });
+    router.push(`/?search=${inputText}`);
   };
 
   return (
-    <form className="search-form" title="search-form" onSubmit={handleSearch}>
+    <form className={styles.searchForm} title="search-form" onSubmit={handleSearch}>
       <input
         type="text"
         name="search"
         id="search"
         placeholder="Enter text"
-        value={inputText}
-        onChange={handleInputChange}
+        value={inputText || urlSearchQuery}
+        onChange={(e) => setInputText(e.target.value)}
       />
       <button type="submit">Search</button>
       <ThrowErrorButton />

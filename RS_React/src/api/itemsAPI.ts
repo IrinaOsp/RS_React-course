@@ -1,4 +1,5 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
+import { HYDRATE } from 'next-redux-wrapper';
 import { baseURL, defaultItemsPerPage } from '../data/data';
 
 type ItemsQueryParams = {
@@ -10,6 +11,11 @@ type ItemsQueryParams = {
 export const itemsAPI = createApi({
   reducerPath: 'itemsApi',
   baseQuery: fetchBaseQuery({ baseUrl: `${baseURL}` }),
+  extractRehydrationInfo(action, { reducerPath }) {
+    if (action.type === HYDRATE) {
+      return action.payload[reducerPath];
+    }
+  },
   endpoints: (build) => ({
     getPokemonList: build.query({
       query: ({
@@ -24,4 +30,9 @@ export const itemsAPI = createApi({
   }),
 });
 
-export const { useGetPokemonListQuery, useGetPokemonDetailsQuery } = itemsAPI;
+export const {
+  useGetPokemonListQuery,
+  useGetPokemonDetailsQuery,
+  util: { getRunningQueriesThunk },
+} = itemsAPI;
+export const { getPokemonList, getPokemonDetails } = itemsAPI.endpoints;

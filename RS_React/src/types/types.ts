@@ -1,5 +1,3 @@
-import { SetURLSearchParams } from 'react-router-dom';
-
 export type TypeSearchResponse = ISearchResponseItem | ISearchResponseArray | null | '';
 
 export interface ISearchResponseItem {
@@ -35,20 +33,8 @@ export interface ISearchArrayItem {
   url: string;
 }
 
-export interface ISearchFormProps {
-  updateSearchData: (data: TypeSearchResponse) => void;
-  searchParams: URLSearchParams;
-  setSearchParams: SetURLSearchParams;
-}
-
 export interface ISearchResultsProps {
   data: TypeSearchResponse;
-}
-
-export interface IPaginationProps {
-  searchParams: URLSearchParams;
-  setSearchParams: SetURLSearchParams;
-  count: number;
 }
 
 export interface ErrorBoundaryState {

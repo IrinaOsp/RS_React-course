@@ -1,5 +1,6 @@
-.search-form {
+.searchForm {
   display: flex;
   gap: 30px;
   align-self: flex-start;
+  width: 100%;
 }

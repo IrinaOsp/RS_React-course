@@ -1,9 +1,11 @@
 import { Component, ErrorInfo, PropsWithChildren, ReactNode } from 'react';
 import { ErrorBoundaryState } from '../types/types';
-import ErrorMessage from './ErrorMessage';
 
 export default class ErrorBoundary extends Component<PropsWithChildren, ErrorBoundaryState> {
-  state: ErrorBoundaryState = { hasError: false };
+  constructor(props: PropsWithChildren) {
+    super(props);
+    this.state = { hasError: false };
+  }
 
   static getDerivedStateFromError() {
     return { hasError: true };
@@ -14,6 +16,14 @@ export default class ErrorBoundary extends Component<PropsWithChildren, ErrorBou
   }
 
   render(): ReactNode {
-    return <ErrorMessage />;
+    if (this.state.hasError) {
+      return (
+        <>
+          <p>Error occurred</p>
+          <button onClick={() => this.setState({ hasError: false })}>Go back to search</button>
+        </>
+      );
+    }
+    return this.props.children;
   }
 }
