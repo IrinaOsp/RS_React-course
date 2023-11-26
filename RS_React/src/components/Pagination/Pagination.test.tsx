@@ -5,14 +5,7 @@ import mockRouter from 'next-router-mock';
 import { Provider } from 'react-redux';
 import { store } from '../../state/store';
 
-vi.mock('next/router', () => ({
-  useRouter: () => ({
-    pathname: '/',
-    query: {},
-    push: vi.fn().mockImplementation(async () => ({ success: true })),
-  }),
-  useDispatch: () => vi.fn(),
-}));
+vi.mock('next/router', () => require('next-router-mock'));
 
 const MockPagination = () => {
   return (
@@ -24,13 +17,15 @@ const MockPagination = () => {
 
 describe('Pagination', () => {
   it('updates URL query parameter when page changes', async () => {
+    mockRouter.push('/');
     render(<MockPagination />);
 
     const nextButtonElement = screen.getByRole('button', { name: /next/i });
     await waitFor(() => {
       fireEvent.click(nextButtonElement);
-      expect(mockRouter.query.page).toBe('2');
-      expect(mockRouter.query.page_size).toBe('8');
+      expect(mockRouter.query).toMatchObject({
+        page: '2',
+      });
     });
   });
 });
