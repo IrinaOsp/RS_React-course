@@ -1,14 +1,15 @@
 import { PayloadAction, createSlice } from '@reduxjs/toolkit';
-import { IFormState, TypeInfoPayload, TypeFormItems } from '../../types/types';
+import { ISliceState, TypeInfoPayload, TypeFormItems } from '../../types/types';
 
-const initialState: IFormState = {
-  name: '',
+const initialState: ISliceState = {
+  userName: '',
   age: 0,
   email: '',
   password: '',
+  confirmPassword: '',
   gender: 'Other',
   acceptanceTC: false,
-  picture: {},
+  picture: null,
   country: '',
 };
 
@@ -16,8 +17,8 @@ const controlledFormSlice = createSlice({
   name: 'controlledForm',
   initialState,
   reducers: {
-    setInfo: (state: IFormState, action: PayloadAction<TypeInfoPayload>) => {
-      (state[action.payload.key] as IFormState[TypeFormItems]) = action.payload.value;
+    setInfo: (state: ISliceState, action: PayloadAction<TypeInfoPayload>) => {
+      (state[action.payload.key] as ISliceState[TypeFormItems]) = action.payload.value;
     },
   },
 });

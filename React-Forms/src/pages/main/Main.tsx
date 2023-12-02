@@ -2,7 +2,6 @@ import { NavLink, Outlet } from 'react-router-dom';
 import './Main.css';
 
 export default function Main() {
-  console.log('In Main');
   return (
     <>
       <header className="header">

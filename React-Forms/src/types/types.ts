@@ -1,9 +1,10 @@
 export type TypeGender = 'Male' | 'Female' | 'Other';
 export type TypeFormItems =
-  | 'name'
+  | 'userName'
   | 'age'
   | 'email'
   | 'password'
+  | 'confirmPassword'
   | 'gender'
   | 'acceptanceTC'
   | 'picture'
@@ -11,16 +12,21 @@ export type TypeFormItems =
 
 export type TypeInfoPayload = {
   key: TypeFormItems;
-  value: IFormState[TypeFormItems];
+  value: ISliceState[TypeFormItems];
 };
 
-export interface IFormState {
-  name: string;
+export interface ISliceState {
+  userName: string;
   age: number;
   email: string;
   password: string;
+  confirmPassword: string;
   gender: TypeGender;
   acceptanceTC: boolean;
-  picture: object;
+  picture: string | ArrayBuffer | null;
   country: string;
+}
+
+export interface IFormState extends Omit<ISliceState, 'picture'> {
+  picture: FileList | null;
 }
