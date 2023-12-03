@@ -30,3 +30,7 @@ export interface ISliceState {
 export interface IFormState extends Omit<ISliceState, 'picture'> {
   picture: FileList | null;
 }
+
+export type ErrorsState = {
+  [key in TypeFormItems]?: string;
+};
