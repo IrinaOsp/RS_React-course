@@ -110,7 +110,7 @@ export default function ReactHookForm() {
         list="country-list"
         {...register('country', { required: true })}
       />
-      <p>{String(errors.country?.message)}</p>
+      <p>{errors.country ? String(errors.country?.message) : ''}</p>
 
       <datalist id="country-list">
         <label htmlFor="suggestion">countries: </label>
