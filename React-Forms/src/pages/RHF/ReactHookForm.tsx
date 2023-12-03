@@ -8,6 +8,7 @@ import { setForm } from '../../store/reducers/controlledFormSlice';
 import { IFormState } from '../../types/types';
 import '../../styles/Form.css';
 import getBase64 from '../../helpers/helpers';
+import PasswordStrengthMeter from '../../components/PasswordStrengthMeter';
 
 export default function ReactHookForm() {
   const {
@@ -70,6 +71,7 @@ export default function ReactHookForm() {
         Password
         <input type="password" {...register('password', { required: true })} />
       </label>
+      <PasswordStrengthMeter password={watch('password')} />
       <p>{errors.password?.message}</p>
 
       <label>

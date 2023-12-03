@@ -8,6 +8,7 @@ import { setForm } from '../../store/reducers/uncontrolledFormSlice';
 import { ErrorsState, IFormState, TypeFormItems, TypeGender } from '../../types/types';
 import { ValidationError } from 'yup';
 import getBase64 from '../../helpers/helpers';
+import PasswordStrengthMeter from '../../components/PasswordStrengthMeter';
 
 const initialState: ErrorsState = {
   userName: '',
@@ -33,6 +34,8 @@ export default function UncontrolledForm() {
   const countryRef = useRef<HTMLInputElement>(null);
 
   const [errors, setErrors] = useState<ErrorsState>(initialState);
+  const [passwordValue, setPasswordValue] = useState('');
+
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -109,8 +112,15 @@ export default function UncontrolledForm() {
       <p>{errors.email}</p>
       <label>
         Password
-        <input type="password" name="password" ref={passwordRef} required />
+        <input
+          type="password"
+          name="password"
+          onChange={(e) => setPasswordValue(e.target.value)}
+          ref={passwordRef}
+          required
+        />
       </label>
+      <PasswordStrengthMeter password={passwordValue} />
       <p>{errors.password}</p>
       <label>
         Confirm password
