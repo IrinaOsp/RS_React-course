@@ -34,3 +34,7 @@ export interface IFormState extends Omit<ISliceState, 'picture'> {
 export type ErrorsState = {
   [key in TypeFormItems]?: string;
 };
+
+export type TypeSubmittedForm = {
+  submittedForms: ISliceState[];
+};

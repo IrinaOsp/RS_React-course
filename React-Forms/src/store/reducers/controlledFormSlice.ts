@@ -1,27 +1,19 @@
 import { PayloadAction, createSlice } from '@reduxjs/toolkit';
-import { ISliceState, TypeInfoPayload, TypeFormItems } from '../../types/types';
+import { ISliceState, TypeSubmittedForm } from '../../types/types';
 
-const initialState: ISliceState = {
-  userName: '',
-  age: 0,
-  email: '',
-  password: '',
-  confirmPassword: '',
-  gender: 'Other',
-  acceptanceTC: false,
-  picture: null,
-  country: '',
+const initialState: TypeSubmittedForm = {
+  submittedForms: [],
 };
 
 const controlledFormSlice = createSlice({
   name: 'controlledForm',
   initialState,
   reducers: {
-    setInfo: (state: ISliceState, action: PayloadAction<TypeInfoPayload>) => {
-      (state[action.payload.key] as ISliceState[TypeFormItems]) = action.payload.value;
+    setForm: (state: TypeSubmittedForm, action: PayloadAction<ISliceState>) => {
+      state.submittedForms.push(action.payload);
     },
   },
 });
 
-export const { setInfo } = controlledFormSlice.actions;
+export const { setForm } = controlledFormSlice.actions;
 export default controlledFormSlice.reducer;

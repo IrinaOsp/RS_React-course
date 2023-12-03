@@ -1,12 +1,13 @@
 import { useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import './UncontrolledForm.css';
+import '../../styles/Form.css';
 import { RootState } from '../../store/store';
 import { useDispatch, useSelector } from 'react-redux';
 import { dataValidationSchema } from '../../validation/schema';
-import { setInfo } from '../../store/reducers/uncontrolledFormSlice';
+import { setForm } from '../../store/reducers/uncontrolledFormSlice';
 import { ErrorsState, IFormState, TypeFormItems, TypeGender } from '../../types/types';
 import { ValidationError } from 'yup';
+import getBase64 from '../../helpers/helpers';
 
 const initialState: ErrorsState = {
   userName: '',
@@ -36,22 +37,7 @@ export default function UncontrolledForm() {
   const navigate = useNavigate();
 
   const countries = useSelector((state: RootState) => state.countriesListSlice);
-  // const UCFdata = useSelector((state: RootState) => state.uncontrolledFormSlice);
-  const getBase64 = (file: FileList) => {
-    const reader = new FileReader();
-    reader.readAsDataURL(file[0]);
-    reader.onload = () => {
-      dispatch(
-        setInfo({
-          key: 'picture',
-          value: file.length ? reader.result : 'no file',
-        })
-      );
-    };
-    reader.onerror = (error) => {
-      console.log('Error: ', error);
-    };
-  };
+
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
@@ -66,58 +52,28 @@ export default function UncontrolledForm() {
       picture: pictureRef.current!.files,
       country: countryRef.current!.value,
     };
+
     try {
       await dataValidationSchema.validate(formData, { abortEarly: false });
-      dispatch(
-        setInfo({
-          key: 'userName',
-          value: formData.userName,
-        })
-      );
-      dispatch(
-        setInfo({
-          key: 'age',
-          value: formData.age,
-        })
-      );
-      dispatch(
-        setInfo({
-          key: 'email',
-          value: formData.email,
-        })
-      );
-      dispatch(
-        setInfo({
-          key: 'password',
-          value: formData.password,
-        })
-      );
-      dispatch(
-        setInfo({
-          key: 'confirmPassword',
-          value: formData.confirmPassword,
-        })
-      );
-      dispatch(
-        setInfo({
-          key: 'gender',
-          value: formData.gender,
-        })
-      );
-      dispatch(
-        setInfo({
-          key: 'acceptanceTC',
-          value: formData.acceptanceTC,
-        })
-      );
-      if (formData.picture instanceof FileList) getBase64(formData.picture);
+
+      const fileBase64: string = await getBase64(formData.picture!);
 
       dispatch(
-        setInfo({
-          key: 'country',
-          value: formData.country,
+        setForm({
+          userName: formData.userName,
+          age: formData.age,
+          email: formData.email,
+          password: formData.password,
+          confirmPassword: formData.confirmPassword,
+          gender: formData.gender,
+          acceptanceTC: formData.acceptanceTC,
+          picture: fileBase64,
+          country: formData.country,
         })
       );
+
+      if (formData.picture instanceof FileList) getBase64(formData.picture);
+
       setTimeout(() => {
         navigate('/');
       }, 2000);
@@ -137,46 +93,47 @@ export default function UncontrolledForm() {
   return (
     <form onSubmit={handleSubmit} className="form">
       <label>
-        Name:
+        Name
         <input type="text" name="name" ref={nameRef} required />
       </label>
       <p>{errors.userName}</p>
       <label>
-        Age:
+        Age
         <input type="number" name="age" ref={ageRef} required />
       </label>
       <p>{errors.age}</p>
       <label>
-        Email:
+        Email
         <input type="email" name="email" ref={emailRef} required />
       </label>
       <p>{errors.email}</p>
       <label>
-        Password:
+        Password
         <input type="password" name="password" ref={passwordRef} required />
       </label>
       <p>{errors.password}</p>
       <label>
-        Confirm password:
+        Confirm password
         <input type="password" name="confirmPassword" ref={confirmPasswordRef} required />
       </label>
       <p>{errors.confirmPassword}</p>
-      <div>
-        <span>Gender:</span>
+
+      <label>
+        Gender
         <select name="gender" id="gender" ref={genderRef} required>
           <option value="male">Male</option>
           <option value="female">Female</option>
           <option value="other">Other</option>
         </select>
-      </div>
+      </label>
       <p>{errors.gender}</p>
       <label>
         Accept T&C
         <input type="checkbox" name="acceptanceTC" ref={acceptanceTCRef} required />
       </label>
       <p>{errors.acceptanceTC}</p>
-      <label>
-        Upload picture
+      <label className="label-inputFile">
+        Choose images to upload (PNG, JPG)
         <input
           type="file"
           accept=".png, .jpeg"

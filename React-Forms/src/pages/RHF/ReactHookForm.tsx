@@ -1,12 +1,13 @@
 import { useDispatch, useSelector } from 'react-redux';
-import { redirect } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { RootState } from '../../store/store';
 import { Data, dataValidationSchema } from '../../validation/schema';
-import { setInfo } from '../../store/reducers/controlledFormSlice';
+import { setForm } from '../../store/reducers/controlledFormSlice';
 import { IFormState } from '../../types/types';
-import './ReactHookForm.css';
+import '../../styles/Form.css';
+import getBase64 from '../../helpers/helpers';
 
 export default function ReactHookForm() {
   const {
@@ -19,65 +20,30 @@ export default function ReactHookForm() {
     mode: 'onChange',
   });
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const countries = useSelector((state: RootState) => state.countriesListSlice);
 
-  const getBase64 = (file: FileList) => {
-    const reader = new FileReader();
-    reader.readAsDataURL(file[0]);
-    reader.onload = () => {
-      dispatch(
-        setInfo({
-          key: 'picture',
-          value: file.length ? reader.result : 'no file',
-        })
-      );
-    };
-    reader.onerror = (error) => {
-      console.log('Error: ', error);
-    };
-  };
+  const submitForm = async (data: IFormState | Data) => {
+    const fileBase64: string | null =
+      data.picture instanceof FileList ? await getBase64(data.picture) : null;
 
-  const submitForm = (data: IFormState | Data) => {
     dispatch(
-      setInfo({
-        key: 'userName',
-        value: data.userName,
-      })
-    );
-    dispatch(
-      setInfo({
-        key: 'age',
-        value: data.age,
-      })
-    );
-    dispatch(
-      setInfo({
-        key: 'email',
-        value: data.email,
-      })
-    );
-    dispatch(
-      setInfo({
-        key: 'password',
-        value: data.password,
-      })
-    );
-    dispatch(
-      setInfo({
-        key: 'confirmPassword',
-        value: data.confirmPassword,
+      setForm({
+        userName: data.userName,
+        age: data.age,
+        email: data.email,
+        password: data.password,
+        confirmPassword: data.confirmPassword,
+        gender: data.gender,
+        acceptanceTC: data.acceptanceTC,
+        picture: fileBase64,
+        country: data.country,
       })
     );
 
-    if (data.picture instanceof FileList) getBase64(data.picture);
-
-    dispatch(
-      setInfo({
-        key: 'country',
-        value: data.country,
-      })
-    );
-    isSubmitSuccessful ?? redirect('/');
+    setTimeout(() => {
+      isSubmitSuccessful && navigate('/');
+    }, 2000);
   };
 
   watch(['userName', 'age', 'email', 'password', 'confirmPassword', 'picture', 'country']);
@@ -85,49 +51,51 @@ export default function ReactHookForm() {
   return (
     <form onSubmit={handleSubmit(submitForm)} className="form" noValidate>
       <label>
-        Name:
+        Name
         <input type="text" {...register('userName', { required: true })} />
       </label>
       <p>{errors.userName?.message}</p>
       <label>
-        Age:
+        Age
         <input type="number" {...register('age', { required: true })} />
       </label>
       <p>{errors.age?.message}</p>
       <label>
-        Email:
+        Email
         <input type="email" {...register('email', { required: true })} />
       </label>
       <p>{errors.email?.message}</p>
 
       <label>
-        Password:
+        Password
         <input type="password" {...register('password', { required: true })} />
       </label>
       <p>{errors.password?.message}</p>
 
       <label>
-        Confirm password:
+        Confirm password
         <input type="password" {...register('confirmPassword', { required: true })} />
       </label>
       <p>{errors.confirmPassword?.message}</p>
 
-      <div>
-        <span>Gender:</span>
+      <label>
+        Gender
         <select id="gender" {...register('gender', { required: true })}>
           <option value="male">Male</option>
           <option value="female">Female</option>
           <option value="other">Other</option>
         </select>
-      </div>
+      </label>
+      <p>{errors.gender?.message?.toString()}</p>
+
       <label>
         Accept T&C
         <input type="checkbox" {...register('acceptanceTC', { required: true })} />
       </label>
       <p>{errors.acceptanceTC?.message}</p>
 
-      <label>
-        Upload picture
+      <label className="label-inputFile">
+        Choose images to upload (PNG, JPG)
         <input type="file" accept=".png, .jpeg" {...register('picture', { required: true })} />
       </label>
       <p>{errors.picture?.message}</p>
