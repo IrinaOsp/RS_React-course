@@ -1,0 +1,27 @@
+.list {
+  width: 400px;
+  margin: auto;
+  padding: 20px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+ul {
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  padding: 10px;
+}
+
+ul:first-of-type {
+  border: 2px solid greenyellow;
+}
+
+li {
+  list-style: none;
+}
+
+.item-img {
+  width: 50px;
+  height: 50px;
+}
