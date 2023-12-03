@@ -48,6 +48,7 @@ export default function ReactHookForm() {
   };
 
   watch(['userName', 'age', 'email', 'password', 'confirmPassword', 'picture', 'country']);
+  const picture: FileList = watch('picture') as FileList;
 
   return (
     <form onSubmit={handleSubmit(submitForm)} className="form" noValidate>
@@ -97,7 +98,8 @@ export default function ReactHookForm() {
       <p>{errors.acceptanceTC?.message}</p>
 
       <label className="label-inputFile">
-        Choose images to upload (PNG, JPG)
+        {picture?.[0]?.name || 'Choose images to upload (PNG, JPG)'}
+
         <input type="file" accept=".png, .jpeg" {...register('picture', { required: true })} />
       </label>
       <p>{errors.picture?.message}</p>

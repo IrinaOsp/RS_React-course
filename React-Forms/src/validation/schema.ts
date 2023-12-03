@@ -22,7 +22,6 @@ export const dataValidationSchema = yup.object<IFormState>().shape({
   acceptanceTC: yup.boolean().isTrue('Please accept T&C').required(),
   picture: yup
     .mixed()
-    .required('Please upload the file')
     .test('fileSize', 'File size is too large', (value) => {
       return value instanceof FileList && value.length !== 0 && value[0].size <= 5e6;
     })
@@ -32,7 +31,8 @@ export const dataValidationSchema = yup.object<IFormState>().shape({
         value.length !== 0 &&
         ['image/jpeg', 'image/png'].includes(value[0].type)
       );
-    }),
+    })
+    .required('Please upload the file'),
   country: yup.string().equals(countriesList, 'Please choose the country from the list').required(),
 });
 

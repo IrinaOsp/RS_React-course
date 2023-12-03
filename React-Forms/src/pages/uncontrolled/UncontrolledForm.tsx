@@ -34,6 +34,7 @@ export default function UncontrolledForm() {
   const countryRef = useRef<HTMLInputElement>(null);
 
   const [errors, setErrors] = useState<ErrorsState>(initialState);
+  const [uploadedFileName, setUploadedFileName] = useState<string | null>(null);
   const [passwordValue, setPasswordValue] = useState('');
 
   const dispatch = useDispatch();
@@ -143,13 +144,16 @@ export default function UncontrolledForm() {
       </label>
       <p>{errors.acceptanceTC}</p>
       <label className="label-inputFile">
-        Choose images to upload (PNG, JPG)
+        {uploadedFileName ? uploadedFileName : 'Choose images to upload (PNG, JPG)'}
         <input
           type="file"
           accept=".png, .jpeg"
           size={5e6}
           name="picture"
           ref={pictureRef}
+          onChange={(e) => {
+            setUploadedFileName(e.target.files?.length ? e.target.files[0].name : null);
+          }}
           required
         />
       </label>
